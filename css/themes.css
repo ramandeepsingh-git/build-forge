@@ -1,0 +1,51 @@
+/* ============================================================
+   BUILD FORGE — themes.css
+   Theme toggle control. The actual color values for dark/light
+   live in base.css as custom properties keyed off [data-theme]
+   on <html>; this file only styles the switch widget itself.
+   ============================================================ */
+
+.theme-toggle {
+  position: relative;
+  width: 52px;
+  height: 30px;
+  border-radius: var(--radius-full);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  flex-shrink: 0;
+  transition: background-color var(--dur-base) var(--ease-out);
+}
+
+.theme-toggle__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--dur-base) var(--ease-out),
+              background-color var(--dur-base) var(--ease-out);
+}
+
+.theme-toggle__thumb svg {
+  width: 13px;
+  height: 13px;
+  color: var(--bg-base);
+}
+
+[data-theme='light'] .theme-toggle__thumb {
+  transform: translateX(22px);
+  background: var(--accent);
+}
+
+[data-theme='light'] .theme-toggle__thumb svg {
+  color: var(--text-on-accent);
+}
+
+.theme-toggle:hover {
+  border-color: var(--border-strong);
+}

@@ -1,0 +1,302 @@
+[
+  {
+    "id": "psu-corsair-cv450",
+    "brand": "Corsair",
+    "model": "CV450",
+    "category": "psu",
+    "image": "assets/images/psu/corsair-cv450.png",
+    "price": 3499,
+    "wattage": 450,
+    "efficiencyRating": "80+ Bronze",
+    "modularity": "Non-Modular",
+    "formFactor": "ATX",
+    "releaseYear": 2020,
+    "popularity": 68,
+    "specs": [
+      "450W / 80+ Bronze",
+      "Non-Modular",
+      "Single +12V Rail",
+      "Entry-level Build PSU"
+    ]
+  },
+  {
+    "id": "psu-corsair-cx550",
+    "brand": "Corsair",
+    "model": "CX550",
+    "category": "psu",
+    "image": "assets/images/psu/corsair-cx550.png",
+    "price": 4499,
+    "wattage": 550,
+    "efficiencyRating": "80+ Bronze",
+    "modularity": "Non-Modular",
+    "formFactor": "ATX",
+    "releaseYear": 2021,
+    "popularity": 78,
+    "specs": [
+      "550W / 80+ Bronze",
+      "Non-Modular",
+      "Reliable Mainstream PSU",
+      "Continuous Power Rating"
+    ]
+  },
+  {
+    "id": "psu-corsair-rm650",
+    "brand": "Corsair",
+    "model": "RM650",
+    "category": "psu",
+    "image": "assets/images/psu/corsair-rm650.png",
+    "price": 7999,
+    "wattage": 650,
+    "efficiencyRating": "80+ Gold",
+    "modularity": "Fully Modular",
+    "formFactor": "ATX",
+    "releaseYear": 2022,
+    "popularity": 88,
+    "specs": [
+      "650W / 80+ Gold",
+      "Fully Modular",
+      "Zero RPM Fan Mode",
+      "Quiet, Efficient Mid-tier PSU"
+    ]
+  },
+  {
+    "id": "psu-corsair-rm750x",
+    "brand": "Corsair",
+    "model": "RM750x",
+    "category": "psu",
+    "image": "assets/images/psu/corsair-rm750x.png",
+    "price": 9499,
+    "wattage": 750,
+    "efficiencyRating": "80+ Gold",
+    "modularity": "Fully Modular",
+    "formFactor": "ATX",
+    "releaseYear": 2022,
+    "popularity": 85,
+    "specs": [
+      "750W / 80+ Gold",
+      "Fully Modular",
+      "135mm Fluid Dynamic Bearing Fan",
+      "10-Year Warranty"
+    ]
+  },
+  {
+    "id": "psu-corsair-rm850x",
+    "brand": "Corsair",
+    "model": "RM850x",
+    "category": "psu",
+    "image": "assets/images/psu/corsair-rm850x.png",
+    "price": 11999,
+    "wattage": 850,
+    "efficiencyRating": "80+ Gold",
+    "modularity": "Fully Modular",
+    "formFactor": "ATX",
+    "releaseYear": 2022,
+    "popularity": 80,
+    "specs": [
+      "850W / 80+ Gold",
+      "Fully Modular",
+      "Suitable for High-end GPUs",
+      "10-Year Warranty"
+    ]
+  },
+  {
+    "id": "psu-corsair-hx1000",
+    "brand": "Corsair",
+    "model": "HX1000",
+    "category": "psu",
+    "image": "assets/images/psu/corsair-hx1000.png",
+    "price": 19999,
+    "wattage": 1000,
+    "efficiencyRating": "80+ Platinum",
+    "modularity": "Fully Modular",
+    "formFactor": "ATX",
+    "releaseYear": 2021,
+    "popularity": 62,
+    "specs": [
+      "1000W / 80+ Platinum",
+      "Fully Modular",
+      "Enthusiast-grade Build",
+      "Native 12VHPWR Cable Option"
+    ]
+  },
+  {
+    "id": "psu-seasonic-focusgx-650",
+    "brand": "Seasonic",
+    "model": "Focus GX-650",
+    "category": "psu",
+    "image": "assets/images/psu/seasonic-focusgx-650.png",
+    "price": 8499,
+    "wattage": 650,
+    "efficiencyRating": "80+ Gold",
+    "modularity": "Fully Modular",
+    "formFactor": "ATX",
+    "releaseYear": 2020,
+    "popularity": 74,
+    "specs": [
+      "650W / 80+ Gold",
+      "Fully Modular",
+      "Hybrid Fan Control",
+      "10-Year Warranty"
+    ]
+  },
+  {
+    "id": "psu-seasonic-focusgx-850",
+    "brand": "Seasonic",
+    "model": "Focus GX-850",
+    "category": "psu",
+    "image": "assets/images/psu/seasonic-focusgx-850.png",
+    "price": 12499,
+    "wattage": 850,
+    "efficiencyRating": "80+ Gold",
+    "modularity": "Fully Modular",
+    "formFactor": "ATX",
+    "releaseYear": 2020,
+    "popularity": 71,
+    "specs": [
+      "850W / 80+ Gold",
+      "Fully Modular",
+      "Hybrid Fan Control",
+      "10-Year Warranty"
+    ]
+  },
+  {
+    "id": "psu-msi-mag-a650bn",
+    "brand": "MSI",
+    "model": "MAG A650BN",
+    "category": "psu",
+    "image": "assets/images/psu/msi-mag-a650bn.png",
+    "price": 5499,
+    "wattage": 650,
+    "efficiencyRating": "80+ Bronze",
+    "modularity": "Non-Modular",
+    "formFactor": "ATX",
+    "releaseYear": 2021,
+    "popularity": 70,
+    "specs": [
+      "650W / 80+ Bronze",
+      "Non-Modular",
+      "Flat Cable Design",
+      "Mainstream Gaming PSU"
+    ]
+  },
+  {
+    "id": "psu-msi-mpg-a850g",
+    "brand": "MSI",
+    "model": "MPG A850G",
+    "category": "psu",
+    "image": "assets/images/psu/msi-mpg-a850g.png",
+    "price": 11499,
+    "wattage": 850,
+    "efficiencyRating": "80+ Gold",
+    "modularity": "Fully Modular",
+    "formFactor": "ATX",
+    "releaseYear": 2022,
+    "popularity": 75,
+    "specs": [
+      "850W / 80+ Gold",
+      "Fully Modular",
+      "Native 12VHPWR Connector",
+      "Quiet Double Ball Bearing Fan"
+    ]
+  },
+  {
+    "id": "psu-cooler-master-mwe-550",
+    "brand": "Cooler Master",
+    "model": "MWE Gold 550 V2",
+    "category": "psu",
+    "image": "assets/images/psu/coolermaster-mwe-550.png",
+    "price": 5999,
+    "wattage": 550,
+    "efficiencyRating": "80+ Gold",
+    "modularity": "Non-Modular",
+    "formFactor": "ATX",
+    "releaseYear": 2021,
+    "popularity": 69,
+    "specs": [
+      "550W / 80+ Gold",
+      "Non-Modular",
+      "High Efficiency at Mid Wattage",
+      "5-Year Warranty"
+    ]
+  },
+  {
+    "id": "psu-cooler-master-mwe-750",
+    "brand": "Cooler Master",
+    "model": "MWE Gold 750 V2 Full Modular",
+    "category": "psu",
+    "image": "assets/images/psu/coolermaster-mwe-750.png",
+    "price": 8999,
+    "wattage": 750,
+    "efficiencyRating": "80+ Gold",
+    "modularity": "Fully Modular",
+    "formFactor": "ATX",
+    "releaseYear": 2021,
+    "popularity": 73,
+    "specs": [
+      "750W / 80+ Gold",
+      "Fully Modular",
+      "Quiet 120mm Fan",
+      "5-Year Warranty"
+    ]
+  },
+  {
+    "id": "psu-deepcool-pf500",
+    "brand": "DeepCool",
+    "model": "PF500",
+    "category": "psu",
+    "image": "assets/images/psu/deepcool-pf500.png",
+    "price": 2999,
+    "wattage": 500,
+    "efficiencyRating": "80+ White",
+    "modularity": "Non-Modular",
+    "formFactor": "ATX",
+    "releaseYear": 2022,
+    "popularity": 60,
+    "specs": [
+      "500W / 80+ Standard",
+      "Non-Modular",
+      "Budget Entry PSU",
+      "Suited for Light Builds"
+    ]
+  },
+  {
+    "id": "psu-antec-hcg850-gold",
+    "brand": "Antec",
+    "model": "HCG850 Gold Extreme",
+    "category": "psu",
+    "image": "assets/images/psu/antec-hcg850-gold.png",
+    "price": 10999,
+    "wattage": 850,
+    "efficiencyRating": "80+ Gold",
+    "modularity": "Fully Modular",
+    "formFactor": "ATX",
+    "releaseYear": 2022,
+    "popularity": 57,
+    "specs": [
+      "850W / 80+ Gold",
+      "Fully Modular",
+      "Japanese Capacitors",
+      "10-Year Warranty"
+    ]
+  },
+  {
+    "id": "psu-evga-supernova-1200-p6",
+    "brand": "EVGA",
+    "model": "SuperNOVA 1200 P6",
+    "category": "psu",
+    "image": "assets/images/psu/evga-supernova-1200-p6.png",
+    "price": 22999,
+    "wattage": 1200,
+    "efficiencyRating": "80+ Platinum",
+    "modularity": "Fully Modular",
+    "formFactor": "ATX",
+    "releaseYear": 2021,
+    "popularity": 54,
+    "specs": [
+      "1200W / 80+ Platinum",
+      "Fully Modular",
+      "Built for Multi-GPU / Flagship Builds",
+      "10-Year Warranty"
+    ]
+  }
+]

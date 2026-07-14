@@ -1,0 +1,222 @@
+/* ============================================================
+   BUILD FORGE — animations.css
+   Keyframes and reusable motion classes. Kept deliberately
+   restrained: a few orchestrated moments rather than scattered
+   effects everywhere. Respects prefers-reduced-motion globally
+   via the rule already declared in base.css.
+   ============================================================ */
+
+/* ---------- Fade + rise: default page/element entrance ---------- */
+
+@keyframes fadeRise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.anim-fade-rise {
+  animation: fadeRise var(--dur-slow) var(--ease-out) both;
+}
+
+/* Stagger helper: apply alongside .anim-fade-rise on list children */
+.anim-stagger > * {
+  animation: fadeRise var(--dur-slow) var(--ease-out) both;
+}
+
+.anim-stagger > *:nth-child(1) { animation-delay: 0ms; }
+.anim-stagger > *:nth-child(2) { animation-delay: 60ms; }
+.anim-stagger > *:nth-child(3) { animation-delay: 120ms; }
+.anim-stagger > *:nth-child(4) { animation-delay: 180ms; }
+.anim-stagger > *:nth-child(5) { animation-delay: 240ms; }
+.anim-stagger > *:nth-child(6) { animation-delay: 300ms; }
+
+/* ---------- Simple fade ---------- */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.anim-fade {
+  animation: fadeIn var(--dur-base) var(--ease-out) both;
+}
+
+/* ---------- Page transition wrapper ---------- */
+/* main.js toggles this class on .page__main when routing between views */
+
+.page-transition {
+  animation: fadeRise var(--dur-slow) var(--ease-out) both;
+}
+
+/* ---------- Slide panel (mobile nav, filter drawer, etc.) ---------- */
+
+.slide-panel {
+  transform: translateX(100%);
+  transition: transform var(--dur-slow) var(--ease-in-out);
+}
+
+.slide-panel--from-left {
+  transform: translateX(-100%);
+}
+
+.slide-panel--bottom {
+  transform: translateY(100%);
+}
+
+.slide-panel.is-open {
+  transform: translate(0, 0);
+}
+
+.slide-panel__scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease-out);
+  z-index: 90;
+}
+
+.slide-panel__scrim.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ---------- Modal ---------- */
+
+.modal-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease-out);
+  z-index: 200;
+}
+
+.modal-scrim.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal {
+  transform: scale(0.94) translateY(8px);
+  opacity: 0;
+  transition: transform var(--dur-base) var(--ease-out),
+              opacity var(--dur-base) var(--ease-out);
+}
+
+.modal-scrim.is-open .modal {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+/* ---------- Accordion ---------- */
+
+.accordion__panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--dur-base) var(--ease-in-out);
+}
+
+.accordion__panel.is-open {
+  max-height: var(--accordion-height, 600px);
+}
+
+.accordion__chevron {
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.accordion__trigger.is-open .accordion__chevron {
+  transform: rotate(180deg);
+}
+
+/* ---------- Loading skeleton ---------- */
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--text-primary) 6%, transparent),
+    transparent
+  );
+  animation: skeletonShimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonShimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ---------- Hover lift (generic, used by cards/buttons already via their own rules) ---------- */
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
+  50% { box-shadow: 0 0 0 6px var(--accent-glow); }
+}
+
+.anim-pulse {
+  animation: pulseGlow 2.2s var(--ease-in-out) infinite;
+}
+
+/* ---------- Spin (loading spinners) ---------- */
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-default);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* ---------- Toast ---------- */
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.toast {
+  animation: toastIn var(--dur-base) var(--ease-out) both;
+}
+
+.toast.is-leaving {
+  animation: fadeIn var(--dur-fast) var(--ease-out) reverse both;
+}
+
+/* ---------- Number count-up tick (price/power changes) ---------- */
+
+@keyframes tickHighlight {
+  0% { color: var(--accent); }
+  100% { color: var(--text-primary); }
+}
+
+.anim-tick {
+  animation: tickHighlight 0.7s var(--ease-out) both;
+}

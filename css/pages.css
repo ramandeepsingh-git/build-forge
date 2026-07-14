@@ -1,0 +1,454 @@
+/* ============================================================
+   BUILD FORGE — pages.css
+   Page-specific styles that don't belong in the generic
+   component library. Organized by page, top to bottom.
+   ============================================================ */
+
+/* ============================================================
+   HOME PAGE
+   ============================================================ */
+
+.hero {
+  padding-block: var(--sp-9) var(--sp-8);
+  overflow: hidden;
+}
+
+.hero__inner {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--sp-8);
+  align-items: center;
+}
+
+@media (max-width: 980px) {
+  .hero__inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hero__copy .eyebrow {
+  display: inline-block;
+  margin-bottom: var(--sp-4);
+}
+
+.hero__title {
+  font-size: var(--fs-4xl);
+  margin-bottom: var(--sp-5);
+}
+
+@media (max-width: 640px) {
+  .hero__title {
+    font-size: var(--fs-3xl);
+  }
+}
+
+.hero__subtitle {
+  font-size: var(--fs-md);
+  color: var(--text-secondary);
+  max-width: 480px;
+  margin-bottom: var(--sp-6);
+}
+
+.hero__actions {
+  display: flex;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-7);
+}
+
+.hero__stats {
+  display: flex;
+  gap: var(--sp-7);
+  flex-wrap: wrap;
+}
+
+.hero__stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.hero__stat .spec-value--lg {
+  color: var(--text-primary);
+}
+
+.hero__stat .text-tertiary {
+  font-size: var(--fs-xs);
+}
+
+.hero__visual {
+  display: flex;
+  justify-content: center;
+}
+
+.stack-diagram {
+  width: min(100%, 360px);
+  filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.35));
+}
+
+.stack-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--text-secondary);
+}
+
+@media (max-width: 980px) {
+  .stack-diagram {
+    width: min(100%, 280px);
+  }
+}
+
+/* ---------- Build card (popular builds) ---------- */
+
+.build-card {
+  padding: var(--sp-5);
+  position: relative;
+}
+
+.build-card__badge {
+  position: absolute;
+  top: var(--sp-4);
+  right: var(--sp-4);
+}
+
+.build-card__title {
+  font-size: var(--fs-lg);
+  margin-top: var(--sp-2);
+  margin-bottom: var(--sp-2);
+  max-width: 80%;
+}
+
+/* ---------- Featured component row ---------- */
+
+.featured-row {
+  padding: var(--sp-5);
+}
+
+.featured-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--sp-3);
+}
+
+.featured-list__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: var(--sp-3);
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: var(--fs-sm);
+}
+
+.featured-list__item:last-child {
+  border-bottom: none;
+}
+
+/* ---------- Why choose us ---------- */
+
+.section--inset {
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.why-card {
+  padding: var(--sp-5);
+}
+
+.why-card__icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: var(--accent-dim);
+  color: var(--accent);
+  margin-bottom: var(--sp-4);
+}
+
+.why-card__icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.why-card h3 {
+  font-size: var(--fs-md);
+  margin-bottom: var(--sp-2);
+}
+
+.why-card p {
+  font-size: var(--fs-sm);
+}
+
+/* ---------- Final CTA ---------- */
+
+.final-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-5);
+  padding: var(--sp-7);
+}
+
+@media (max-width: 640px) {
+  .final-cta {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--sp-5);
+  }
+}
+
+/* ============================================================
+   COMPONENT EXPLORER PAGE
+   Appended for the Component Explorer feature. Everything above
+   this point is unchanged from the original file.
+   ============================================================ */
+
+.explorer-header {
+  padding-block: var(--sp-7) var(--sp-5);
+}
+
+.explorer-tabs {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  margin-top: var(--sp-5);
+}
+
+.explorer-tab {
+  height: 38px;
+  padding-inline: var(--sp-4);
+  border-radius: var(--radius-full);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  transition: background-color var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+
+.explorer-tab:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.explorer-tab.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-on-accent);
+}
+
+/* ---------- Layout: filter sidebar + results ---------- */
+
+.explorer-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: var(--sp-6);
+  align-items: start;
+  padding-bottom: var(--sp-9);
+}
+
+@media (max-width: 900px) {
+  .explorer-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.explorer-filters {
+  position: sticky;
+  top: calc(var(--header-height) + var(--sp-5));
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-5);
+}
+
+@media (max-width: 900px) {
+  .explorer-filters {
+    position: static;
+  }
+}
+
+.explorer-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.explorer-filter-group label {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ---------- Search bar + autocomplete ---------- */
+
+.explorer-search-bar {
+  position: relative;
+  margin-bottom: var(--sp-5);
+}
+
+.autocomplete {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: opacity var(--dur-fast) var(--ease-out),
+              transform var(--dur-fast) var(--ease-out);
+  z-index: 40;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.autocomplete.is-open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.autocomplete__item {
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.autocomplete__item:hover {
+  background: var(--bg-surface);
+  color: var(--accent);
+}
+
+/* ---------- Results header ---------- */
+
+.explorer-results-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-5);
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+/* ---------- Component grid + card ---------- */
+
+.explorer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--sp-5);
+}
+
+.component-card {
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.component-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.component-card__image {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-inset);
+  border-radius: var(--radius-md);
+}
+
+.component-card__image svg {
+  width: 64px;
+  height: 64px;
+}
+
+.component-card__title {
+  font-size: var(--fs-md);
+  line-height: 1.3;
+}
+
+.component-card__specs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  font-size: var(--fs-xs);
+  color: var(--text-secondary);
+}
+
+.component-card__specs li {
+  position: relative;
+  padding-left: var(--sp-3);
+}
+
+.component-card__specs li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+}
+
+.component-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: var(--sp-2);
+}
+
+.component-card__actions {
+  display: flex;
+  gap: var(--sp-2);
+}
+
+.component-card__actions .btn {
+  flex: 1;
+}
+
+/* ---------- Empty state ---------- */
+
+.explorer-empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-9) var(--sp-5);
+  text-align: center;
+}
+
+/* ---------- Toast (explorer-specific positioning) ---------- */
+
+.explorer-toast {
+  position: fixed;
+  bottom: var(--sp-6);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  color: var(--text-primary);
+  padding: var(--sp-3) var(--sp-5);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  font-size: var(--fs-sm);
+  z-index: 300;
+  max-width: 90vw;
+}

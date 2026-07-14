@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Component Explorer — Build Forge</title>
+  <meta name="description" content="Browse every CPU, GPU, motherboard, RAM kit, storage drive, PSU, and case in the Build Forge catalogue. Filter, sort, search, and favorite components." />
+
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+  <div class="page">
+    <header id="site-header" class="site-header"></header>
+
+    <main class="page__main">
+
+      <!-- ============ EXPLORER HEADER ============ -->
+      <section class="explorer-header">
+        <div class="container">
+          <span class="eyebrow">Build Forge / Catalogue</span>
+          <h1 class="section-title">Component Explorer</h1>
+          <p class="section-subtitle">Browse the full catalogue across every category. Filter by brand and price, search instantly, and save favorites as you go.</p>
+
+          <div class="explorer-tabs" role="tablist" aria-label="Component categories">
+            <button class="explorer-tab is-active" data-category="all" role="tab" aria-selected="true">All</button>
+            <button class="explorer-tab" data-category="cpu" role="tab" aria-selected="false">CPUs</button>
+            <button class="explorer-tab" data-category="gpu" role="tab" aria-selected="false">GPUs</button>
+            <button class="explorer-tab" data-category="motherboard" role="tab" aria-selected="false">Motherboards</button>
+            <button class="explorer-tab" data-category="ram" role="tab" aria-selected="false">RAM</button>
+            <button class="explorer-tab" data-category="storage" role="tab" aria-selected="false">Storage</button>
+            <button class="explorer-tab" data-category="psu" role="tab" aria-selected="false">PSUs</button>
+            <button class="explorer-tab" data-category="case" role="tab" aria-selected="false">Cases</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ EXPLORER BODY: FILTERS + GRID ============ -->
+      <section class="container explorer-layout">
+
+        <!-- ---------- Filter sidebar ---------- -->
+        <aside class="explorer-filters card" aria-label="Filters">
+          <div class="explorer-search-bar">
+            <div class="input-group">
+              <span class="icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+              </span>
+              <input
+                type="text"
+                id="explorer-search"
+                class="input input--with-icon"
+                placeholder="Search components..."
+                autocomplete="off"
+                aria-label="Search components"
+              />
+            </div>
+            <ul class="autocomplete" id="explorer-autocomplete"></ul>
+          </div>
+
+          <div class="explorer-filter-group">
+            <label for="filter-brand">Brand</label>
+            <select id="filter-brand" class="select">
+              <option value="all">All Brands</option>
+            </select>
+          </div>
+
+          <div class="explorer-filter-group">
+            <label for="filter-price">Max Price (₹)</label>
+            <input type="number" id="filter-price" class="input" placeholder="e.g. 50000" min="0" step="500" />
+          </div>
+
+          <div class="explorer-filter-group">
+            <label for="filter-sort">Sort By</label>
+            <select id="filter-sort" class="select">
+              <option value="popularity">Popularity</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="newest">Newest</option>
+            </select>
+          </div>
+
+          <button class="btn btn--ghost btn--sm btn--block" id="explorer-clear-filters">Clear Filters</button>
+        </aside>
+
+        <!-- ---------- Results ---------- -->
+        <div class="explorer-results">
+          <div class="explorer-results-head">
+            <span class="text-secondary text-mono" id="explorer-result-count">Loading…</span>
+          </div>
+
+          <div class="explorer-grid" id="explorer-grid"></div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <footer id="site-footer" class="site-footer"></footer>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/components-explorer.js"></script>
+</body>
+</html>
