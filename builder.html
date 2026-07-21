@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PC Build Planner — Build Forge</title>
+  <meta name="description" content="Plan and configure your custom PC with Build Forge's real-time compatibility and power calculations." />
+
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+  <div class="page">
+    <header id="site-header" class="site-header"></header>
+
+    <main class="page__main">
+      <section class="builder-header">
+        <div class="container">
+          <span class="eyebrow">Build Forge / Planner</span>
+          <div class="builder-title-row">
+            <div>
+              <input
+                type="text"
+                id="build-name"
+                class="builder-name-input"
+                value="Untitled Build"
+                placeholder="Name your build..."
+                aria-label="Build Name"
+              />
+              <div class="builder-meta">
+                <span>Created: <span id="build-created">—</span></span>
+                <span style="margin-left: var(--sp-4);">Last Updated: <span id="build-updated">—</span></span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="builder-notes-group">
+            <label for="build-notes">Build Notes</label>
+            <textarea
+              id="build-notes"
+              class="input builder-notes-textarea"
+              placeholder="Add details about your budget, goals, or parts choice..."
+            ></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="container builder-layout">
+        <!-- Left: Parts Slots -->
+        <div class="part-slots-list" id="slots-container">
+          <!-- Dynamically populated by builder.js -->
+        </div>
+
+        <!-- Right: Summary Sidebar -->
+        <aside class="builder-layout__summary" aria-label="Build Summary">
+          <!-- Total Price Widget -->
+          <div class="card summary-widget">
+            <h2 class="summary-widget__title">Cost Summary</h2>
+            <div class="spec-row" style="padding-block: var(--sp-3); border-bottom: none;">
+              <span class="text-secondary" style="font-size: var(--fs-md);">Total Price</span>
+              <span class="spec-value spec-value--lg spec-value--accent" id="summary-price" style="font-size: var(--fs-xl);">₹0</span>
+            </div>
+            
+            <div class="divider" style="margin-block: var(--sp-4);"></div>
+
+            <!-- Power Draw Widget -->
+            <h2 class="summary-widget__title">Power Estimation</h2>
+            <div class="spec-row">
+              <span class="spec-row__label">Est. System Draw</span>
+              <span class="spec-value" id="summary-wattage">0W</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-row__label">Recommended PSU</span>
+              <span class="spec-value" id="summary-rec-psu">350W</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-row__label">PSU Load</span>
+              <span class="spec-value" id="summary-psu-load">—</span>
+            </div>
+            
+            <div class="power-bar-container">
+              <div class="power-bar">
+                <div class="power-bar__fill" id="power-bar-fill"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Compatibility Report Widget -->
+          <div class="card summary-widget">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-4);">
+              <h2 class="summary-widget__title" style="margin-bottom: 0;">Compatibility</h2>
+              <span class="badge badge--good" id="compatibility-badge">Good</span>
+            </div>
+            <div class="compat-checklist" id="compatibility-checklist">
+              <!-- Dynamically populated by builder.js -->
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div style="display: flex; flex-direction: column; gap: var(--sp-2); margin-bottom: var(--sp-7);">
+            <button class="btn btn--primary btn--block" id="btn-save-build">Save Build</button>
+            <div style="display: flex; gap: var(--sp-2);">
+              <button class="btn btn--secondary btn--block" id="btn-export-build">Export JSON</button>
+              <button class="btn btn--ghost btn--block text-error" id="btn-clear-build" style="color: var(--status-error);">Clear Build</button>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <footer id="site-footer" class="site-footer"></footer>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/builder.js"></script>
+</body>
+</html>

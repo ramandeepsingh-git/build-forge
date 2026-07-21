@@ -19,3 +19,6 @@ node_modules/
 # Build output if added later
 dist/
 build/
+
+#Helper files
+PROJECT.md

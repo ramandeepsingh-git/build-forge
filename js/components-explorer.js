@@ -6,9 +6,9 @@
  * storage.js; nothing here touches localStorage directly.
  */
 
-import { $, $$, loadJSON, formatCurrency, formatWatts, capitalize, debounce } from './utils.js';
+import { $, $$, loadJSON, formatCurrency, formatWatts, capitalize, debounce, getQueryParam } from './utils.js';
 import { searchComponents, bindSearchInput } from './search.js';
-import { isFavorite, toggleFavorite } from './storage.js';
+import { isFavorite, toggleFavorite, getDraft, saveDraft } from './storage.js';
 
 const CATEGORY_CONFIG = [
   { key: 'cpu', label: 'CPUs', file: 'data/cpus.json' },
@@ -225,9 +225,16 @@ function bindCardActions(grid) {
   $$('[data-action="add-to-build"]', grid).forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      // The Build Planner page reads this query param on load to preselect a part.
-      // Builder wiring itself is a separate, not-yet-built feature.
-      window.location.href = `builder.html?addCategory=${btn.dataset.category}&addId=${btn.dataset.id}`;
+      const { category, id } = btn.dataset;
+      const draft = getDraft();
+      if (!draft.parts) draft.parts = {};
+      draft.parts[category] = id;
+      saveDraft(draft);
+
+      const items = state.allItems;
+      const item = items.find((it) => it.id === id && it.category === category);
+      const name = item ? `${item.brand} ${item.model}` : category.toUpperCase();
+      showToast(`Added ${name} to build.`);
     });
   });
 }
@@ -375,6 +382,15 @@ export async function initComponentExplorer() {
   grid.innerHTML = renderSkeletonCards(6);
 
   state.allItems = await loadAllComponents();
+
+  // Read category query param to preselect category (e.g. from Build Planner redirects)
+  const catParam = getQueryParam('category');
+  if (catParam && CATEGORY_CONFIG.some((cfg) => cfg.key === catParam)) {
+    state.activeCategory = catParam;
+    $$('.explorer-tab').forEach((tab) => {
+      tab.classList.toggle('is-active', tab.dataset.category === catParam);
+    });
+  }
 
   renderBrandOptions();
   bindCategoryTabs();
