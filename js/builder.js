@@ -24,7 +24,7 @@ const state = {
   ],
   allComponents: [],           // flat list of all components across categories
   componentsByCategory: {},    // key: category key, value: array of components
-  
+
   draft: {
     id: null,
     name: 'Untitled Build',
@@ -76,7 +76,7 @@ async function loadAllComponents() {
       return [];
     }
   });
-  
+
   const allResults = await Promise.all(loadedPromises);
   state.allComponents = allResults.flat();
 }
@@ -88,7 +88,7 @@ async function loadAllComponents() {
 async function loadDraftState() {
   const editId = getQueryParam('editBuildId');
   let loaded = null;
-  
+
   if (editId) {
     loaded = getBuildById(editId);
     if (loaded) {
@@ -102,7 +102,7 @@ async function loadDraftState() {
       };
     }
   }
-  
+
   if (!loaded) {
     const draft = getDraft();
     state.draft = {
@@ -123,7 +123,7 @@ async function loadDraftState() {
       updatedAt: draft.updatedAt || null
     };
   }
-  
+
   // Check for add-to-build parameters (retained for backward compatibility or direct links)
   const addCat = getQueryParam('addCategory');
   const addId = getQueryParam('addId');
@@ -132,19 +132,23 @@ async function loadDraftState() {
     saveDraft(state.draft);
     showToast(`Added part to ${capitalize(addCat)} slot.`);
   }
-  
+
   // Clean URL query parameters so refreshes are clean
   if (window.history.replaceState) {
     window.history.replaceState({}, document.title, window.location.pathname);
   }
-  
+
   // Populate form elements
   const nameInput = $('#build-name');
-  if (nameInput) nameInput.value = state.draft.name;
-  
+  if (nameInput) {
+    nameInput.value = state.draft.name;
+  }
+
   const notesTextarea = $('#build-notes');
-  if (notesTextarea) notesTextarea.value = state.draft.notes;
-  
+  if (notesTextarea) {
+    notesTextarea.value = state.draft.notes;
+  }
+
   updateBuildMetaTimestamps();
 }
 
@@ -159,11 +163,12 @@ function updateBuildMetaTimestamps() {
     createdEl.textContent = 'Not Saved';
   }
   if (state.draft.updatedAt) {
-    updatedEl.textContent = new Date(state.draft.updatedAt).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' });
+    updatedEl.textContent = new Date(state.draft.updatedAt).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'long' });
   } else {
     updatedEl.textContent = 'Not Saved';
   }
 }
+
 
 /* ============================================================
    UI RENDERING: MAIN PAGE
@@ -205,9 +210,9 @@ function getSecondaryMetric(item) {
 function renderSlots() {
   const container = $('#slots-container');
   if (!container) return;
-  
+
   const resolved = resolveParts();
-  
+
   container.innerHTML = state.categories.map(cat => {
     const item = resolved[cat.key];
     if (!item) {
@@ -228,9 +233,9 @@ function renderSlots() {
         </div>
       `;
     }
-    
+
     const specLine = (item.specs && item.specs.length) ? item.specs.slice(0, 2).join(' • ') : '';
-    
+
     return `
       <div class="part-slot" data-category="${cat.key}" data-id="${item.id}">
         <div class="part-slot__icon-container" aria-hidden="true">
@@ -256,7 +261,7 @@ function renderSlots() {
       </div>
     `;
   }).join('');
-  
+
   bindSlotEventListeners();
 }
 
@@ -272,7 +277,7 @@ function bindSlotEventListeners() {
       window.location.href = `components.html?category=${btn.dataset.category}`;
     });
   });
-  
+
   $$('[data-action="remove"]').forEach(btn => {
     btn.addEventListener('click', () => {
       removePart(btn.dataset.category);
@@ -282,29 +287,29 @@ function bindSlotEventListeners() {
 
 function renderSummary() {
   const resolved = resolveParts();
-  
+
   // 1. Calculate price
   const totalPrice = Object.values(resolved).reduce((sum, item) => sum + (item ? item.price : 0), 0);
   const priceEl = $('#summary-price');
   if (priceEl) priceEl.textContent = formatCurrency(totalPrice);
-  
+
   // 2. Power Report
   const powerReport = buildPowerReport(resolved);
   const wattageEl = $('#summary-wattage');
   if (wattageEl) wattageEl.textContent = formatWatts(powerReport.totalWatts);
-  
+
   const recPsuEl = $('#summary-rec-psu');
   if (recPsuEl) recPsuEl.textContent = formatWatts(powerReport.recommendedPsu);
-  
+
   const psu = resolved.psu;
   const loadEl = $('#summary-psu-load');
   const barFill = $('#power-bar-fill');
-  
+
   if (loadEl && barFill) {
     if (psu) {
       const pct = powerReport.efficiencyPct;
       loadEl.textContent = `${pct}%`;
-      
+
       barFill.style.width = `${Math.min(pct, 100)}%`;
       barFill.className = 'power-bar__fill';
       if (pct > 100) {
@@ -318,20 +323,20 @@ function renderSummary() {
       barFill.className = 'power-bar__fill';
     }
   }
-  
+
   // 3. Compatibility Report
   const compatReport = runCompatibilityReport(resolved, powerReport.totalWatts);
-  
+
   // 4. Checklist rendering with pending checks condition
   const checklist = $('#compatibility-checklist');
   if (checklist) {
     checklist.innerHTML = compatReport.checks.map(chk => {
       const reqs = checkRequirements[chk.label] || [];
       const isPending = reqs.some(req => !resolved[req]);
-      
+
       let statusClass = 'compat-item--good';
       let icon = '✓';
-      
+
       if (isPending) {
         statusClass = 'compat-item--pending';
         icon = '○';
@@ -342,7 +347,7 @@ function renderSummary() {
         statusClass = 'compat-item--error';
         icon = '✕';
       }
-      
+
       return `
         <div class="compat-item ${statusClass}">
           <div class="compat-item__label">
@@ -354,7 +359,7 @@ function renderSummary() {
       `;
     }).join('');
   }
-  
+
   // 5. Update overall badge: Good only if all active checks are good AND components are not null
   const badge = $('#compatibility-badge');
   if (badge) {
@@ -364,7 +369,7 @@ function renderSummary() {
       const reqs = checkRequirements[c.label] || [];
       return reqs.some(r => !resolved[r]);
     });
-    
+
     badge.className = 'badge';
     if (hasError) {
       badge.textContent = 'Error';
@@ -388,11 +393,12 @@ function renderSummary() {
 
 function removePart(category) {
   state.draft.parts[category] = null;
+  state.draft.updatedAt = new Date().toISOString();
   saveDraft(state.draft);
-  
+  updateBuildMetaTimestamps();
   renderSlots();
   renderSummary();
-  
+
   showToast(`Removed ${category.toUpperCase()} from build.`);
 }
 
@@ -406,10 +412,10 @@ function saveCurrentBuild() {
     state.draft.id = saved.id;
     state.draft.createdAt = saved.createdAt;
     state.draft.updatedAt = saved.updatedAt;
-    
+
     saveDraft(state.draft);
     updateBuildMetaTimestamps();
-    
+
     showToast(`Build "${state.draft.name}" saved locally.`);
   } else {
     showToast('Error saving build.');
@@ -432,18 +438,18 @@ function clearCurrentBuild() {
     state.draft.notes = '';
     state.draft.createdAt = null;
     state.draft.updatedAt = null;
-    
+
     clearDraft();
-    
+
     const nameInput = $('#build-name');
     if (nameInput) nameInput.value = state.draft.name;
     const notesText = $('#build-notes');
     if (notesText) notesText.value = state.draft.notes;
-    
+
     renderSlots();
     renderSummary();
     updateBuildMetaTimestamps();
-    
+
     showToast('Build draft cleared.');
   }
 }
@@ -456,17 +462,17 @@ function exportCurrentBuild() {
       Object.entries(resolved).map(([k, v]) => [k, v ? { brand: v.brand, model: v.model, price: v.price } : null])
     )
   };
-  
+
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
-  
+
   const a = document.createElement('a');
   a.href = url;
   const safeName = state.draft.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   a.download = `buildforge-${safeName || 'untitled'}.json`;
   document.body.appendChild(a);
   a.click();
-  
+
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
   showToast('Build config exported.');
@@ -516,33 +522,39 @@ function componentPlaceholderSVG(category) {
 async function initBuilder() {
   const container = $('#slots-container');
   if (!container) return; // not on the builder page
-  
+
   // Render skeletons first
   container.innerHTML = Array.from({ length: 7 })
     .map(() => `<div class="part-slot card skeleton" style="height: 90px; border-radius: var(--radius-lg);"></div>`)
     .join('');
-  
+
   await loadAllComponents();
   await loadDraftState();
-  
+
   renderSlots();
   renderSummary();
-  
+
   $('#btn-save-build')?.addEventListener('click', saveCurrentBuild);
   $('#btn-clear-build')?.addEventListener('click', clearCurrentBuild);
   $('#btn-export-build')?.addEventListener('click', exportCurrentBuild);
-  
+
   // Auto-saving name
   $('#build-name')?.addEventListener('input', debounce((e) => {
     state.draft.name = e.target.value.trim() || 'Untitled Build';
+    state.draft.updatedAt = new Date().toISOString();
     saveDraft(state.draft);
+    updateBuildMetaTimestamps();
   }, 250));
-  
+
   // Auto-saving notes
   $('#build-notes')?.addEventListener('input', debounce((e) => {
     state.draft.notes = e.target.value.trim();
+    state.draft.updatedAt = new Date().toISOString();
     saveDraft(state.draft);
+    updateBuildMetaTimestamps();
   }, 250));
+  //Auto-saving time updated
+
 }
 
 document.addEventListener('DOMContentLoaded', initBuilder);

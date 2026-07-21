@@ -229,6 +229,7 @@ function bindCardActions(grid) {
       const draft = getDraft();
       if (!draft.parts) draft.parts = {};
       draft.parts[category] = id;
+      draft.updatedAt = new Date().toISOString();
       saveDraft(draft);
 
       const items = state.allItems;
