@@ -1,183 +1,196 @@
 # BuildForge Testing
 
-## Milestone 2
-Build Planner + Compatibility Engine + Power Calculator
+## Milestone 3
+Saved Builds & Favorites
 
 ---
 
-# Builder Initialization
+# Page Loading
 
-- [x] Builder page loads successfully.
-- [x] Skeleton placeholders appear before data loads.
-- [x] All JSON files load successfully.
-- [x] No unexpected console errors.
-
----
-
-# Draft Management
-
-## Initial Load
-
-- [x] Empty draft loads correctly.
-- [x] Existing draft restores correctly.
-- [ ] Editing an existing build (`editBuildId`) works.
-- [x] Build name loads correctly.
-- [x] Build notes load correctly.
-- [x] Created timestamp displays correctly.
-- [x] Updated timestamp displays correctly.
-
-## Autosave
-
-- [x] Build name autosaves.
-- [x] Notes autosave.
-- [x] Refresh restores latest draft.
+- [x] saved.html opens successfully.
+- [x] Header renders correctly.
+- [x] Footer renders correctly.
+- [x] No console errors.
+- [x] JSON component catalogues load successfully.
 
 ---
 
-# Component Slots
+# Tab Navigation
 
-For every category:
+## Saved Builds Tab
 
-- [x] CPU
-- [x] Motherboard
-- [x] GPU
-- [x] RAM
-- [x] Storage
-- [x] PSU
-- [x] Case
+- [x] Builds tab selected by default.
+- [x] Saved build count displayed correctly.
+- [x] Empty state appears when no builds exist.
+
+## Favorites Tab
+
+- [x] Favorites tab switches correctly.
+- [x] Favorite count displayed correctly.
+- [x] Empty state appears when no favorites exist.
+
+---
+
+# Saved Builds
+
+Create multiple builds before testing.
+
+For every saved build verify:
+
+- [x] Build card renders.
+- [x] Build name displayed.
+- [x] Total price displayed.
+- [x] Total power displayed.
+- [x] Compatibility badge displayed.
+- [x] Created date displayed.
+- [x] Updated date displayed.
+
+---
+
+# Saved Build Actions
+
+## Load
+
+- [x] Load button restores build into Builder.
+- [x] Builder page displays correct components.
+
+## Duplicate
+
+- [x] Duplicate creates a second build.
+- [x] Duplicate has unique ID.
+- [x] Duplicate retains all selected parts.
+- [x] Build count updates.
+
+## Delete
+
+- [x] Confirmation appears (if implemented).
+- [x] Build removed correctly.
+- [x] Build count updates.
+- [x] Empty state shown when last build deleted.
+
+---
+
+# Import Build
+
+Test with:
+
+- [x] Valid exported JSON.
+- [x] Invalid JSON.
+- [x] Empty file.
+- [x] Wrong file type.
 
 Verify:
 
-- [x] Empty slot renders correctly.
-- [x] Choose button works.
-- [x] Selected component renders correctly.
-- [x] Change button works.
+- [x] Build imports successfully.
+- [x] Imported build appears immediately.
+- [x] Imported build can be loaded.
+- [x] Errors handled gracefully.
+
+---
+
+# Favorites
+
+Choose favorites from Component Explorer.
+
+Verify:
+
+- [x] Favorite page displays all favorites.
+- [x] Correct category shown.
+- [x] Brand displayed.
+- [x] Model displayed.
+- [x] Price displayed.
+- [x] Secondary metric displayed.
+
+---
+
+# Favorite Actions
+
+## Remove Favorite
+
 - [x] Remove button works.
-- [x] Price displayed correctly.
-- [x] Secondary metric displayed correctly.
+- [x] Card disappears immediately.
+- [x] Counter updates.
+- [x] LocalStorage updates.
+
+## Add To Build
+
+- [x] Opens Builder with component selected.
+OR
+- [x] Adds to draft correctly.
 
 ---
 
-# Build Summary
+# Local Storage
 
-## Price
+Verify persistence.
 
-- [x] Total price updates immediately.
-
-## Power Calculator
-
-- [x] CPU power counted.
-- [x] GPU power counted.
-- [x] RAM power counted.
-- [x] Storage power counted.
-- [x] Motherboard fallback works.
-- [x] Cooler fallback works.
-- [x] Fan estimation works.
-- [x] Total wattage calculated correctly.
-- [x] Recommended PSU updates correctly.
-
-## PSU Load
-
-Without PSU selected:
-
-- [x] Load shows "—"
-
-With PSU selected:
-
-- [x] Load percentage calculated correctly.
-- [x] Progress bar updates.
-- [x] Warning color above 80%.
-- [x] Error color above 100%.
+- [x] Saved builds survive refresh.
+- [x] Favorites survive refresh.
+- [x] Imported builds survive refresh.
+- [x] Deleted builds stay deleted.
 
 ---
 
-# Compatibility Engine
+# Counters
 
-## CPU
+Verify counters update after:
 
-- [x] Socket compatibility
-- [x] Socket incompatibility
-
-## RAM
-
-- [x] Generation
-- [x] Speed
-- [x] Capacity
-- [x] Slot count
-
-## Storage
-
-- [x] Interface
-- [x] PCIe generation
-
-## GPU
-
-- [x] GPU length vs case
-
-## Motherboard
-
-- [x] Motherboard size vs case
-
-## PSU
-
-- [x] PSU size vs case
-- [x] PSU wattage
-- [x] GPU recommended PSU
-
-## CPU Cooler
-
-- [x] Socket support
-- [x] Case clearance
+- [x] Save build.
+- [x] Delete build.
+- [x] Duplicate build.
+- [x] Import build.
+- [x] Favorite.
+- [x] Unfavorite.
 
 ---
 
-# Compatibility UI
+# Compatibility Preview
 
-- [x] Pending checks display correctly.
-- [x] Good checks display correctly.
-- [x] Warning checks display correctly.
-- [x] Error checks display correctly.
+If build cards display compatibility:
 
-Overall badge:
-
-- [x] Incomplete
-- [x] Good
-- [x] Warning
-- [x] Error
+- [x] GOOD builds display correctly.
+- [x] WARNING builds display correctly.
+- [x] ERROR builds display correctly.
 
 ---
 
-# Build Actions
+# Power Summary
 
-## Save
+If build cards display power:
 
-- [x] Build saves successfully.
-- [x] Timestamps update.
-- [x] Toast shown.
-
-## Clear
-
-- [x] Confirmation dialog appears.
-- [x] Build resets correctly.
-- [x] Summary resets.
-- [x] Slots reset.
-- [x] Draft cleared.
-
-## Export
-
-- [x] JSON downloads.
-- [x] Filename generated correctly.
-- [x] JSON contains build data.
-- [x] JSON contains resolved component summary.
+- [x] Estimated wattage correct.
+- [x] Recommended PSU correct.
 
 ---
 
-# Toasts
+# Empty States
 
-- [x] Add-to-build toast.
-- [x] Remove part toast.
-- [x] Save toast.
-- [x] Export toast.
+Verify:
+
+- [x] No saved builds.
+- [x] No favorites.
+
+Both should show a friendly empty state.
+
+---
+
+# Responsive Layout
+
+Desktop
+
+- [x] Grid layout.
+- [x] Cards aligned.
+- [x] Buttons accessible.
+
+Tablet
+
+- [x] Cards resize correctly.
+
+Mobile
+
+- [x] No horizontal scrolling.
+- [x] Buttons remain usable.
+- [x] Tabs remain usable.
 
 ---
 
@@ -185,35 +198,48 @@ Overall badge:
 
 Expected:
 
-- No runtime errors.
-- No failed JSON requests.
+- [x] No runtime errors.
+- [x] No failed JSON requests.
 
 Ignore:
 
 - Live Server WebSocket warning.
-- Chrome DevTools `.well-known` CSP warning.
+- Chrome DevTools `.well-known` warning.
+
+---
+
+# Regression Check
+
+Verify previously completed features still work.
+
+- [x] Component Explorer favorites still work.
+- [x] Builder still saves builds.
+- [x] Export still works.
+- [x] Theme still persists.
+- [x] Navigation still functions.
 
 ---
 
 # Known Issues (Post-MVP)
 
-- [ ] Mobile navigation z-index.
-- [ ] `aria-selected` sync.
-- [ ] Stronger import validation.
-- [ ] `duplicateBuild()` deep copy.
+- [x] Mobile navigation z-index..
+- [x] Stronger import validation.
+- [x] Duplicate build deep-copy review.
+- [ ] Additional build sorting/filtering.
+- [ ] Update time and created time on imported build issue.
 
 ## Commit Information
 
-Feature:Build Plannrer 
+Feature: Saved Builds and Favourites 
 __________________________________________
 
-Commit Message: Buildpanner added 
+Commit Message: Added Saved builds and Favourite components 
 __________________________________________
 
-Date: 30/06/2026
+Date: 23/07/2026
 __________________________________________
 
-Notes: Browseable Builder page with working links to the other pages along with components page carrying multiple compnents with working filters
+Notes: Users and browse their saved builds and favourite components and also import custom builds  
 __________________________________________
 
 __________________________________________

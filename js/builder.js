@@ -101,6 +101,7 @@ async function loadDraftState() {
         updatedAt: loaded.updatedAt || null
       };
     }
+    saveDraft(state.draft);
   }
 
   if (!loaded) {

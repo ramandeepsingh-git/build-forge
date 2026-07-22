@@ -320,7 +320,7 @@
   width: min(320px, 84vw);
   background: var(--bg-surface);
   border-right: 1px solid var(--border-subtle);
-  z-index: 95;
+  z-index: 105;
   padding: var(--sp-5);
   display: flex;
   flex-direction: column;

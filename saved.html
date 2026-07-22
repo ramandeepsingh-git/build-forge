@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saved Builds & Favorites — Build Forge</title>
+  <meta name="description" content="View and manage your saved PC configurations and favorite components on Build Forge." />
+
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+  <div class="page">
+    <header id="site-header" class="site-header"></header>
+
+    <main class="page__main">
+      <!-- ============ HEADER ============ -->
+      <section class="saved-header">
+        <div class="container">
+          <div class="saved-header__inner">
+            <div>
+              <span class="eyebrow">Build Forge / Hub</span>
+              <h1 class="section-title">Saved Builds &amp; Favorites</h1>
+              <p class="section-subtitle">Manage your custom configurations and saved components in one place. Export, duplicate, or restore them anytime.</p>
+            </div>
+            <div>
+              <button class="btn btn--secondary btn--sm" id="btn-import-build">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16" style="margin-right: var(--sp-1);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                Import Build
+              </button>
+              <input type="file" id="file-import" accept=".json" style="display: none;" />
+            </div>
+          </div>
+
+          <!-- ============ TABS ============ -->
+          <div class="saved-tabs" role="tablist" aria-label="Saved items">
+            <button class="saved-tab is-active" data-tab="builds" role="tab" aria-selected="true">
+              Saved Builds (<span id="builds-count">0</span>)
+            </button>
+            <button class="saved-tab" data-tab="favorites" role="tab" aria-selected="false">
+              Favorites (<span id="favorites-count">0</span>)
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ CONTENT GRID ============ -->
+      <section class="container saved-container">
+        <div class="saved-grid" id="saved-items-grid">
+          <!-- Dynamically populated by favorites.js -->
+        </div>
+      </section>
+    </main>
+
+    <footer id="site-footer" class="site-footer"></footer>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/favorites.js"></script>
+</body>
+</html>

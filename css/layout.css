@@ -25,6 +25,7 @@
   z-index: 100;
   height: var(--header-height);
   display: flex;
+  min-width: 400px;
   align-items: center;
   background: color-mix(in srgb, var(--bg-base) 80%, transparent);
   backdrop-filter: blur(16px) saturate(140%);
@@ -147,6 +148,7 @@
 @media (max-width: 1080px) {
   .builder-layout {
     grid-template-columns: 1fr;
+    min-width: 400px;
   }
 }
 
