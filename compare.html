@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compare Center — Build Forge</title>
+  <meta name="description" content="Compare PC components or saved builds side-by-side with Build Forge's custom comparison tables." />
+
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+  <div class="page">
+    <header id="site-header" class="site-header"></header>
+
+    <main class="page__main">
+      <!-- ============ HEADER ============ -->
+      <section class="compare-header">
+        <div class="container">
+          <div class="compare-header__inner">
+            <div>
+              <span class="eyebrow">Build Forge / Comparison</span>
+              <h1 class="section-title">Compare Center</h1>
+              <p class="section-subtitle">Analyze specifications, pricing, power draw, and compatibility details side-by-side.</p>
+            </div>
+          </div>
+
+          <!-- ============ TABS ============ -->
+          <div class="compare-tabs" role="tablist" aria-label="Comparison category">
+            <button class="compare-tab is-active" data-tab="components" role="tab" aria-selected="true">
+              Compare Components
+            </button>
+            <button class="compare-tab" data-tab="builds" role="tab" aria-selected="false">
+              Compare Builds
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ CONTENT AREA ============ -->
+      <section class="container" style="padding-bottom: var(--sp-9);">
+        
+        <!-- ========== VIEW 1: COMPARE COMPONENTS ========== -->
+        <div id="component-compare-view">
+          <div style="display: flex; justify-content: flex-end; margin-bottom: var(--sp-3);" id="comp-clear-bar">
+            <button class="btn btn--ghost btn--sm" id="btn-clear-compare" style="color: var(--status-error);">
+              Clear Selection
+            </button>
+          </div>
+          <div class="compare-table-wrapper" id="component-table-container">
+            <!-- Dynamically populated by compare.js -->
+          </div>
+        </div>
+
+        <!-- ========== VIEW 2: COMPARE SAVED BUILDS ========== -->
+        <div id="build-compare-view" style="display: none;">
+          <div class="compare-selector-row">
+            <div class="compare-selector-group">
+              <label for="select-build-a">Build A</label>
+              <select id="select-build-a" class="select">
+                <option value="">Select a build...</option>
+              </select>
+            </div>
+            <div class="compare-selector-group">
+              <label for="select-build-b">Build B</label>
+              <select id="select-build-b" class="select">
+                <option value="">Select a build...</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="compare-table-wrapper" id="build-table-container" style="margin-top: var(--sp-5);">
+            <!-- Dynamically populated by compare.js -->
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <footer id="site-footer" class="site-footer"></footer>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/compare.js"></script>
+</body>
+</html>

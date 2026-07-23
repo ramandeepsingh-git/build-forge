@@ -140,8 +140,8 @@ export function importBuildFromJSON(jsonString) {
   const imported = {
     id: generateId('build'),
     name: parsed.name ? `${parsed.name} (Imported)` : 'Imported Build',
-    createdAt: now,
-    updatedAt: now,
+    createdAt: parsed.createdAt,
+    updatedAt: parsed.updatedAt,
     parts: parsed.parts,
     notes: parsed.notes || '',
   };

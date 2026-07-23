@@ -1,196 +1,167 @@
 # BuildForge Testing
 
-## Milestone 3
-Saved Builds & Favorites
+## Milestone 4
+Compare Builds
 
 ---
 
 # Page Loading
 
-- [x] saved.html opens successfully.
+- [x] compare.html opens successfully.
 - [x] Header renders correctly.
 - [x] Footer renders correctly.
 - [x] No console errors.
-- [x] JSON component catalogues load successfully.
+- [x] No missing CSS.
 
 ---
 
-# Tab Navigation
+# Initial State
 
-## Saved Builds Tab
+When there are:
 
-- [x] Builds tab selected by default.
-- [x] Saved build count displayed correctly.
-- [x] Empty state appears when no builds exist.
+## No Saved Builds
 
-## Favorites Tab
+- [x] Friendly empty state shown.
+- [x] User guided to create builds.
 
-- [x] Favorites tab switches correctly.
-- [x] Favorite count displayed correctly.
-- [x] Empty state appears when no favorites exist.
+## One Saved Build
 
----
+- [ ] Appropriate message displayed.
+- [ ] Compare action disabled.
 
-# Saved Builds
+## Two or More Saved Builds
 
-Create multiple builds before testing.
-
-For every saved build verify:
-
-- [x] Build card renders.
-- [x] Build name displayed.
-- [x] Total price displayed.
-- [x] Total power displayed.
-- [x] Compatibility badge displayed.
-- [x] Created date displayed.
-- [x] Updated date displayed.
+- [x] Build selectors appear.
+- [x] Compare button enabled.
 
 ---
 
-# Saved Build Actions
+# Build Selection
 
-## Load
+## Left Build
 
-- [x] Load button restores build into Builder.
-- [x] Builder page displays correct components.
+- [x] Can select any saved build.
+- [x] Selection updates correctly.
 
-## Duplicate
+## Right Build
 
-- [x] Duplicate creates a second build.
-- [x] Duplicate has unique ID.
-- [x] Duplicate retains all selected parts.
-- [x] Build count updates.
-
-## Delete
-
-- [x] Confirmation appears (if implemented).
-- [x] Build removed correctly.
-- [x] Build count updates.
-- [x] Empty state shown when last build deleted.
+- [x] Can select any saved build.
+- [x] Selection updates correctly.
 
 ---
 
-# Import Build
+# Prevent Invalid Selection
 
-Test with:
+- [x] Cannot compare with empty selection.
+- [x] Appropriate warning shown.
 
-- [x] Valid exported JSON.
-- [x] Invalid JSON.
-- [x] Empty file.
-- [x] Wrong file type.
+---
+
+# Comparison Table
+
+Verify each row displays correctly.
+
+## General
+
+- [x] Build name
+- [x] Total price
+- [x] Estimated power
+- [x] Recommended PSU
+- [x] Compatibility status
+
+## Components
+
+- [x] CPU
+- [x] Motherboard
+- [x] GPU
+- [x] RAM
+- [x] Storage
+- [x] PSU
+- [x] Case
+
+---
+
+# Differences
+
+Verify differences are highlighted.
+
+- [ ] Different CPU highlighted.
+- [ ] Different GPU highlighted.
+- [ ] Different RAM highlighted.
+- [ ] Different Storage highlighted.
+- [ ] Different PSU highlighted.
+- [ ] Different Case highlighted.
+
+Verify identical values are not highlighted.
+
+---
+
+# Price Comparison
+
+- [x] Price difference correct.
+- [x] More expensive build identified correctly.
+
+---
+
+# Power Comparison
+
+- [x] Estimated wattage correct.
+- [x] Recommended PSU correct.
+- [x] Higher power build identified correctly.
+
+---
+
+# Compatibility
+
+Compare builds with:
+
+- [x] GOOD status
+- [x] WARNING status
+- [x] ERROR status
+
+Verify badges display correctly.
+
+---
+
+# Loading Different Builds
+
+Change selections repeatedly.
 
 Verify:
 
-- [x] Build imports successfully.
-- [x] Imported build appears immediately.
-- [x] Imported build can be loaded.
-- [x] Errors handled gracefully.
-
----
-
-# Favorites
-
-Choose favorites from Component Explorer.
-
-Verify:
-
-- [x] Favorite page displays all favorites.
-- [x] Correct category shown.
-- [x] Brand displayed.
-- [x] Model displayed.
-- [x] Price displayed.
-- [x] Secondary metric displayed.
-
----
-
-# Favorite Actions
-
-## Remove Favorite
-
-- [x] Remove button works.
-- [x] Card disappears immediately.
-- [x] Counter updates.
-- [x] LocalStorage updates.
-
-## Add To Build
-
-- [x] Opens Builder with component selected.
-OR
-- [x] Adds to draft correctly.
+- [x] Comparison updates immediately.
+- [x] Old data removed.
+- [x] No duplicated rows.
+- [x] No stale values remain.
 
 ---
 
 # Local Storage
 
-Verify persistence.
-
-- [x] Saved builds survive refresh.
-- [x] Favorites survive refresh.
-- [x] Imported builds survive refresh.
-- [x] Deleted builds stay deleted.
-
----
-
-# Counters
-
-Verify counters update after:
-
-- [x] Save build.
-- [x] Delete build.
-- [x] Duplicate build.
-- [x] Import build.
-- [x] Favorite.
-- [x] Unfavorite.
-
----
-
-# Compatibility Preview
-
-If build cards display compatibility:
-
-- [x] GOOD builds display correctly.
-- [x] WARNING builds display correctly.
-- [x] ERROR builds display correctly.
-
----
-
-# Power Summary
-
-If build cards display power:
-
-- [x] Estimated wattage correct.
-- [x] Recommended PSU correct.
-
----
-
-# Empty States
-
-Verify:
-
-- [x] No saved builds.
-- [x] No favorites.
-
-Both should show a friendly empty state.
+- [x] Newly saved builds appear automatically.
+- [x] Deleted builds disappear.
+- [x] Renamed builds update correctly.
+- [x] Refresh preserves available builds.
 
 ---
 
 # Responsive Layout
 
-Desktop
+## Desktop
 
-- [x] Grid layout.
-- [x] Cards aligned.
-- [x] Buttons accessible.
+- [x] Side-by-side comparison readable.
+- [x] Table aligned correctly.
 
-Tablet
+## Tablet
 
-- [x] Cards resize correctly.
+- [x] Layout adapts correctly.
 
-Mobile
+## Mobile
 
-- [x] No horizontal scrolling.
-- [x] Buttons remain usable.
-- [x] Tabs remain usable.
+- [x] No horizontal overflow beyond intended scrolling.
+- [x] Table remains usable.
+- [x] Build selectors usable.
+- [x] Compare button accessible.
 
 ---
 
@@ -210,36 +181,43 @@ Ignore:
 
 # Regression Check
 
-Verify previously completed features still work.
+Verify previous milestones still work.
 
-- [x] Component Explorer favorites still work.
-- [x] Builder still saves builds.
-- [x] Export still works.
-- [x] Theme still persists.
-- [x] Navigation still functions.
+- [x] Build Planner
+- [x] Saved Builds
+- [x] Favorites
+- [x] Component Explorer
+- [x] Compatibility Engine
+- [x] Power Calculator
+- [x] Theme persistence
+- [x] Navigation
 
 ---
 
 # Known Issues (Post-MVP)
 
+- [ ] Add "Show only differences" option.
+- [ ] Export comparison.
+- [ ] Print-friendly comparison view.
+- [ ] Sorting comparison categories.
 - [x] Mobile navigation z-index..
 - [x] Stronger import validation.
 - [x] Duplicate build deep-copy review.
 - [ ] Additional build sorting/filtering.
-- [ ] Update time and created time on imported build issue.
+- [x] Update time and created time on imported build issue.
 
 ## Commit Information
 
-Feature: Saved Builds and Favourites 
+Feature: Compare Builds and Components 
 __________________________________________
 
-Commit Message: Added Saved builds and Favourite components 
+Commit Message: Comparison Enabled for Saved Builds and Components 
 __________________________________________
 
 Date: 23/07/2026
 __________________________________________
 
-Notes: Users and browse their saved builds and favourite components and also import custom builds  
+Notes: Users can Compare their saved builds and components   
 __________________________________________
 
 __________________________________________

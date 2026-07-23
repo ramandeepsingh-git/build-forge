@@ -1042,3 +1042,164 @@
   margin-bottom: var(--sp-5);
   line-height: 1.5;
 }
+
+/* ============================================================
+   COMPARE PAGE
+   ============================================================ */
+
+.compare-header {
+  padding-block: var(--sp-7) var(--sp-4);
+}
+
+.compare-header__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+
+.compare-selector-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-6);
+  margin-top: var(--sp-5);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-5);
+}
+
+@media (max-width: 640px) {
+  .compare-selector-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.compare-selector-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.compare-selector-group label {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Compare table */
+.compare-table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  margin-top: var(--sp-5);
+  margin-bottom: var(--sp-9);
+}
+
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: var(--fs-sm);
+}
+
+.compare-table th,
+.compare-table td {
+  padding: var(--sp-4) var(--sp-5);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.compare-table tr:last-child td {
+  border-bottom: none;
+}
+
+.compare-table__label {
+  font-weight: 600;
+  color: var(--text-secondary);
+  width: 240px;
+  background: var(--bg-inset);
+  border-right: 1px solid var(--border-subtle);
+}
+
+.compare-table__value {
+  width: calc((100% - 240px) / 2);
+}
+
+.compare-table__value--highlight {
+  background: rgba(255, 90, 31, 0.02);
+}
+
+.compare-table__header {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--text-primary);
+  vertical-align: top;
+}
+
+.compare-table__item-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  height: 100%;
+}
+
+.compare-table__item-image {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-inset);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--sp-2);
+  color: var(--text-tertiary);
+  border: 1px solid var(--border-subtle);
+}
+
+.compare-table__item-image svg {
+  width: 48px;
+  height: 48px;
+}
+
+.compare-table__diff-value {
+  font-weight: 500;
+}
+
+.compare-table__diff-value--better {
+  color: var(--status-good);
+}
+
+/* Tab indicator */
+.compare-tabs {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-5);
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: var(--sp-1);
+}
+
+.compare-tab {
+  height: 40px;
+  padding-inline: var(--sp-4);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+
+.compare-tab:hover {
+  color: var(--text-primary);
+}
+
+.compare-tab.is-active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
