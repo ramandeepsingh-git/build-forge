@@ -247,17 +247,19 @@ function renderSlots() {
           <span class="part-slot__name">${item.brand} ${item.model}</span>
           <span class="part-slot__specs">${specLine}</span>
         </div>
-        <div class="part-slot__meta">
-          <span class="part-slot__price">${formatCurrency(item.price)}</span>
-          <span class="badge badge--neutral text-mono">${getSecondaryMetric(item)}</span>
-        </div>
-        <div class="part-slot__actions">
-          <button class="btn btn--secondary btn--sm" data-action="change" data-category="${cat.key}">
-            Change
-          </button>
-          <button class="icon-btn" data-action="remove" data-category="${cat.key}" aria-label="Remove ${item.brand} ${item.model}" data-tooltip="Remove part">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-          </button>
+        <div class = "part-slot__grid">
+          <div class="part-slot__meta">
+            <span class="part-slot__price">${formatCurrency(item.price)}</span>
+            <span class="badge badge--neutral text-mono">${getSecondaryMetric(item)}</span>
+          </div>
+          <div class="part-slot__actions">
+            <button class="btn btn--secondary btn--sm" data-action="change" data-category="${cat.key}">
+              Change
+            </button>
+            <button class="icon-btn" data-action="remove" data-category="${cat.key}" aria-label="Remove ${item.brand} ${item.model}" data-tooltip="Remove part">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
         </div>
       </div>
     `;

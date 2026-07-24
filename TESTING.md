@@ -208,16 +208,16 @@ Verify previous milestones still work.
 
 ## Commit Information
 
-Feature: Compare Builds and Components 
+Feature: About page
 __________________________________________
 
-Commit Message: Comparison Enabled for Saved Builds and Components 
+Commit Message: Added about page
 __________________________________________
 
-Date: 23/07/2026
+Date: 24/07/2026
 __________________________________________
 
-Notes: Users can Compare their saved builds and components   
+Notes:    
 __________________________________________
 
 __________________________________________

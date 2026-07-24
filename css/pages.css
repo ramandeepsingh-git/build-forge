@@ -600,11 +600,14 @@
 .part-slot__specs {
   font-size: var(--fs-xs);
   color: var(--text-secondary);
-  white-space: nowrap;
+  white-space: wrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+.part-slot__grid{
+  display: flex;
+  flex-direction: row;
+}
 .part-slot__meta {
   display: flex;
   flex-direction: column;
@@ -626,7 +629,12 @@
   gap: var(--sp-2);
   flex-shrink: 0;
 }
-
+@media(max-width: 450px){
+  .part-slot__grid{
+    flex-direction: column ;
+    gap : 10px;
+  }
+}
 /* Empty slot states */
 .part-slot--empty {
   border: 1px dashed var(--border-default);
