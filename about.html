@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Build Forge — PC Planner Guide</title>
+  <meta name="description" content="Learn about Build Forge's engineering principles, client-side architecture, and follow our step-by-step PC building assembly guide." />
+
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+  <div class="page">
+    <header id="site-header" class="site-header"></header>
+
+    <main class="page__main">
+      <!-- ============ HERO ============ -->
+      <section class="about-hero">
+        <div class="container about-hero__inner">
+          <span class="eyebrow">Build Forge / Engineering</span>
+          <h1 class="about-hero__title">Designed for Builders</h1>
+          <p class="section-subtitle" style="max-width: 600px; margin-inline: auto;">
+            Build Forge is a premium, client-side PC build planner built entirely on vanilla web standards. Pick components, check safety overheads, and design your setup offline.
+          </p>
+          
+          <!-- Core Pillars Grid -->
+          <div class="about-pillars">
+            <div class="about-pillar-card">
+              <div class="about-pillar-card__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <h3 class="about-pillar-card__title">Compatibility Engine</h3>
+              <p class="about-pillar-card__text">
+                Evaluates 14 individual rules checking CPU socket matching, RAM notch fits, physical clearances, and PSU capacities in real-time.
+              </p>
+            </div>
+            
+            <div class="about-pillar-card">
+              <div class="about-pillar-card__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              </div>
+              <h3 class="about-pillar-card__title">Power Calculator</h3>
+              <p class="about-pillar-card__text">
+                Estimates TDP ratings, draws, and recommended wattage headroom configurations with high safety factors.
+              </p>
+            </div>
+            
+            <div class="about-pillar-card">
+              <div class="about-pillar-card__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <h3 class="about-pillar-card__title">Compare Center</h3>
+              <p class="about-pillar-card__text">
+                Allows side-by-side spec sheet mappings for individual catalog items or complete saved builds to check specs.
+              </p>
+            </div>
+            
+            <div class="about-pillar-card">
+              <div class="about-pillar-card__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <h3 class="about-pillar-card__title">Offline Architecture</h3>
+              <p class="about-pillar-card__text">
+                Stores your drafts, favorites, and configs in your browser with LocalStorage. Zero sign-up, tracker-free, and instantly responsive.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ TECH STACK SECTION ============ -->
+      <section class="about-tech-section">
+        <div class="container">
+          <div class="about-tech-grid">
+            <div>
+              <span class="eyebrow">Stack Spec</span>
+              <h2 class="section-title" style="font-size: var(--fs-xl);">Clean Vanilla Codebase</h2>
+              <p class="text-secondary" style="font-size: var(--fs-sm); line-height: 1.6; margin-bottom: var(--sp-4);">
+                Build Forge is built without heavy frameworks or bundle layers. The business logic is separated from DOM interactions in pure JS modules.
+              </p>
+              <div class="about-tech__standards">
+                <span class="about-tech__tag">ES6 Modules</span>
+                <span class="about-tech__tag">Vanilla HTML5</span>
+                <span class="about-tech__tag">Modern CSS3 Grid/Flex</span>
+                <span class="about-tech__tag">LocalStorage API</span>
+                <span class="about-tech__tag">JSON Feeds</span>
+              </div>
+            </div>
+            
+            <div class="card" style="padding: var(--sp-5);">
+              <h3 class="about-pillar-card__title" style="font-size: var(--fs-sm); margin-bottom: var(--sp-2);">Architecture Guidelines</h3>
+              <ul style="font-size: var(--fs-xs); color: var(--text-secondary); padding-left: var(--sp-4); line-height: 1.8; display: flex; flex-direction: column; gap: var(--sp-1);">
+                <li><strong>Decoupled Logic:</strong> Business equations (PSU calculator, compatibility engine checks) are completely decoupled from layout renders.</li>
+                <li><strong>Defensive Schema:</strong> Missing slots, drafts, or catalog data return fallback states rather than throwing runtime errors.</li>
+                <li><strong>No Bundlers:</strong> Raw files ship to browser targets directly, utilizing native modern ES6 imports.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ PC BUILDING TIMELINE ============ -->
+      <section class="container about-guide-section">
+        <div class="section__head" style="text-align: center; max-width: 600px; margin-inline: auto; margin-bottom: var(--sp-5);">
+          <span class="eyebrow">Builder Handbook</span>
+          <h2 class="section-title">Assembly Roadmap</h2>
+          <p class="section-subtitle">A step-by-step checklist guide to installing and configuring your PC components.</p>
+        </div>
+        
+        <div class="guide-timeline">
+          <div class="timeline-step">
+            <span class="timeline-step__badge">Step 01</span>
+            <h4 class="timeline-step__title">Install CPU</h4>
+            <p class="timeline-step__text">Align the golden triangle marking on your processor with the socket corner, place it gently, and secure the socket latch arm.</p>
+          </div>
+          
+          <div class="timeline-step">
+            <span class="timeline-step__badge">Step 02</span>
+            <h4 class="timeline-step__title">Seat Memory (RAM)</h4>
+            <p class="timeline-step__text">Push open DIMM slot notches, line up the offset RAM connector gap, and press down firmly on both ends until double notches click back.</p>
+          </div>
+          
+          <div class="timeline-step">
+            <span class="timeline-step__badge">Step 03</span>
+            <h4 class="timeline-step__title">Mount Motherboard</h4>
+            <p class="timeline-step__text">Line up motherboard I/O shield ports with case cutouts, check screw alignment with case metal standoffs, and secure board screws.</p>
+          </div>
+          
+          <div class="timeline-step">
+            <span class="timeline-step__badge">Step 04</span>
+            <h4 class="timeline-step__title">CPU Cooler</h4>
+            <p class="timeline-step__text">Apply a pea-sized dot of thermal compound paste to the CPU, mount the cooler bracket, secure heatsink screws, and plug fan into CPU_FAN header.</p>
+          </div>
+          
+          <div class="timeline-step">
+            <span class="timeline-step__badge">Step 05</span>
+            <h4 class="timeline-step__title">Seat GPU (PCIe)</h4>
+            <p class="timeline-step__text">Open the primary PCIe x16 slot lock, remove case rear slot brackets, slide card down until latch clicks, and screw GPU bracket to case frame.</p>
+          </div>
+          
+          <div class="timeline-step">
+            <span class="timeline-step__badge">Step 06</span>
+            <h4 class="timeline-step__title">Install Storage</h4>
+            <p class="timeline-step__text">Mount M.2 NVMe SSDs into board sockets at a 30-degree angle, lay flat, and screw down. Secure SATA HDDs/SSDs inside case drive mounts.</p>
+          </div>
+          
+          <div class="timeline-step">
+            <span class="timeline-step__badge">Step 07</span>
+            <h4 class="timeline-step__title">Power Connections</h4>
+            <p class="timeline-step__text">Install PSU into bottom case shroud. Connect main 24-pin Motherboard cable, CPU 8-pin connector, GPU PCIe power pins, and SATA lines.</p>
+          </div>
+          
+          <div class="timeline-step">
+            <span class="timeline-step__badge">Step 08</span>
+            <h4 class="timeline-step__title">POST and BIOS</h4>
+            <p class="timeline-step__text">Plug case power pins to board front headers, connect HDMI to GPU port, boot system, check board diagnostic LEDs, and enter BIOS setup.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer id="site-footer" class="site-footer"></footer>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
