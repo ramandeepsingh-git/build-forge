@@ -208,13 +208,13 @@ Verify previous milestones still work.
 
 ## Commit Information
 
-Feature: About page
+Feature: test
 __________________________________________
 
-Commit Message: Added about page
+Commit Message: testing
 __________________________________________
 
-Date: 24/07/2026
+Date: 5/08/2026
 __________________________________________
 
 Notes:    
