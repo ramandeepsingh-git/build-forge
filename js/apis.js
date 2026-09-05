@@ -1,6 +1,6 @@
 import { getAuthToken } from './storage.js';
 
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = 'https://build-forge.onrender.com';
 
 export async function apiRequest(endpoint, options = {}) {
 
