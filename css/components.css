@@ -61,6 +61,8 @@
 }
 
 .btn--sm {
+  text-wrap: wrap;
+  min-width: 109px;
   height: 36px;
   padding-inline: var(--sp-4);
   font-size: var(--fs-xs);
@@ -357,6 +359,24 @@
 .mobile-nav__links a.is-active {
   color: var(--accent);
   background: var(--accent-dim);
+}
+
+.mobile-nav__footer {
+  margin-top: auto;
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-nav__theme-label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
 }
 
 /* ---------- Tooltip (minimal) ---------- */

@@ -42,7 +42,7 @@ function renderHeader() {
     ? `<a href="profile.html" class="icon-btn" aria-label="View Profile" data-tooltip="Account Profile" style="${active === 'profile.html' ? 'border-color: var(--accent); color: var(--accent);' : ''}">
         ${userIconSVG()}
        </a>`
-    : `<a href="login.html" class="btn btn--secondary btn--sm">Sign In</a>`;
+    : `<a href="login.html" class="btn btn--secondary btn--sm" id="header-signin-btn">Sign In</a>`;
 
   mount.innerHTML = `
     <div class="site-header__inner">
@@ -104,12 +104,19 @@ function renderMobileNav(active, navLinks) {
         ? `<li><a href="profile.html" class="${active === 'profile.html' ? 'is-active' : ''}">Profile</a></li>` 
         : `<li><a href="login.html" class="${active === 'login.html' ? 'is-active' : ''}">Sign In</a></li>`}
     </ul>
-    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark or light theme">
-          <span class="theme-toggle__thumb">${sunIconSVG()}</span>
-        </button>
+    <div class="mobile-nav__footer">
+      <div class="mobile-nav__theme-label">
+        <span>Theme</span>
+      </div>
+      <button class="theme-toggle" id="mobile-theme-toggle" aria-label="Toggle dark or light theme">
+        <span class="theme-toggle__thumb">${sunIconSVG()}</span>
+      </button>
+    </div>
   `;
   
   document.body.append(scrim, panel);
+
+  bindThemeToggle($('#mobile-theme-toggle'));
 
   const open = () => {
     scrim.classList.add('is-open');
