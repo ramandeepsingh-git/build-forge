@@ -2,23 +2,33 @@
  * main.js
  * Entry point loaded on every page. Responsible for:
  *  - rendering the shared site header + footer into their mount points
+ *  - dynamic authentication-aware navigation (Profile / Sign In)
  *  - wiring the theme toggle
  *  - wiring the mobile nav drawer
- * Page-specific logic (builder, components explorer, etc.) lives in
- * its own module and is imported only by the HTML page that needs it.
+ * Page-specific logic lives in its own module and is imported only by the HTML page.
  */
 
 import { $, $$ } from './utils.js';
 import { initTheme, bindThemeToggle } from './theme.js';
+import { getAuthToken } from './storage.js';
 
-const NAV_LINKS = [
+const BASE_NAV_LINKS = [
   { label: 'Home', href: 'index.html' },
   { label: 'Build Planner', href: 'builder.html' },
   { label: 'Component Explorer', href: 'components.html' },
   { label: 'Saved Builds', href: 'saved.html' },
   { label: 'Compare', href: 'compare.html' },
   { label: 'About', href: 'about.html' },
+  { label: 'Profile', href: 'profile.html' },
 ];
+
+function getNavLinks() {
+  const token = getAuthToken();
+  if (token) {
+    return [...BASE_NAV_LINKS];
+  }
+  return [...BASE_NAV_LINKS];
+}
 
 function currentPage() {
   const path = window.location.pathname.split('/').pop();
@@ -30,6 +40,14 @@ function renderHeader() {
   if (!mount) return;
 
   const active = currentPage();
+  const navLinks = getNavLinks();
+  const token = getAuthToken();
+
+  const authActionHTML = token
+    ? `<a href="profile.html" class="icon-btn" aria-label="View Profile" data-tooltip="Account Profile" style="${active === 'profile.html' ? 'border-color: var(--accent); color: var(--accent);' : ''}">
+        ${userIconSVG()}
+       </a>`
+    : `<a href="login.html" class="btn btn--secondary btn--sm">Sign In</a>`;
 
   mount.innerHTML = `
     <div class="site-header__inner">
@@ -39,7 +57,7 @@ function renderHeader() {
           <span>Build<span class="brand__name-secondary">Forge</span></span>
         </a>
         <nav class="site-header__links" aria-label="Primary">
-          ${NAV_LINKS.map((link) => `
+          ${navLinks.map((link) => `
             <a href="${link.href}" class="nav-link${link.href === active ? ' nav-link--active' : ''}">
               ${link.label}
             </a>
@@ -50,6 +68,7 @@ function renderHeader() {
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark or light theme">
           <span class="theme-toggle__thumb">${sunIconSVG()}</span>
         </button>
+        ${authActionHTML}
         <a href="builder.html" class="btn btn--primary btn--sm">Start Building</a>
         <button class="icon-btn site-header__menu-toggle" id="mobile-menu-toggle" aria-label="Open menu">
           ${menuIconSVG()}
@@ -59,12 +78,15 @@ function renderHeader() {
   `;
 
   bindThemeToggle($('#theme-toggle'));
-  renderMobileNav(active);
+  renderMobileNav(active, navLinks);
 }
 
-function renderMobileNav(active) {
+function renderMobileNav(active, navLinks) {
   // Build the off-canvas drawer once and append to body.
-  if ($('#mobile-nav-scrim')) return;
+  const existingScrim = $('#mobile-nav-scrim');
+  if (existingScrim) existingScrim.remove();
+  const existingPanel = $('#mobile-nav-panel');
+  if (existingPanel) existingPanel.remove();
 
   const scrim = document.createElement('div');
   scrim.id = 'mobile-nav-scrim';
@@ -80,9 +102,10 @@ function renderMobileNav(active) {
       <button class="icon-btn" id="mobile-menu-close" aria-label="Close menu">${closeIconSVG()}</button>
     </div>
     <ul class="mobile-nav__links">
-      ${NAV_LINKS.map((link) => `
+      ${navLinks.map((link) => `
         <li><a href="${link.href}" class="${link.href === active ? 'is-active' : ''}">${link.label}</a></li>
       `).join('')}
+      ${!getAuthToken() ? `<li><a href="login.html" class="${active === 'login.html' ? 'is-active' : ''}">Sign In</a></li>` : ''}
     </ul>
   `;
   
@@ -133,8 +156,10 @@ function renderFooter() {
         </ul>
       </div>
       <div class="site-footer__col">
-        <h4>Company</h4>
+        <h4>Account</h4>
         <ul>
+          <li><a href="profile.html">Profile</a></li>
+          <li><a href="login.html">Sign In</a></li>
           <li><a href="about.html">About</a></li>
         </ul>
       </div>
@@ -146,7 +171,7 @@ function renderFooter() {
   `;
 }
 
-/* ---------- Inline icon SVGs (kept tiny and dependency-free) ---------- */
+/* ---------- Inline icon SVGs ---------- */
 
 function brandMarkSVG() {
   return `
@@ -161,6 +186,10 @@ function sunIconSVG() {
   return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.4 1.4M17.6 17.6 19 19M19 5l-1.4 1.4M6.4 17.6 5 19"/></svg>`;
 }
 
+function userIconSVG() {
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+}
+
 function menuIconSVG() {
   return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>`;
 }
@@ -172,15 +201,22 @@ function closeIconSVG() {
 /* ---------- Boot ---------- */
 
 function initApp() {
-  initTheme(); // must run before paint to avoid theme flash; called again safely here for pages that load main.js late
+  initTheme();
   renderHeader();
   renderFooter();
 
-  // Fade the freshly-mounted main content in, per the animation spec.
+  // Authentication entry guard
+  const active = currentPage();
+  const token = getAuthToken();
+  if (active === 'saved.html' && !token) {
+    window.location.href = 'login.html?redirect=saved.html';
+    return;
+  }
+
   const mainEl = $('.page__main');
   if (mainEl) mainEl.classList.add('page-transition');
 }
 
 document.addEventListener('DOMContentLoaded', initApp);
 
-export { NAV_LINKS };
+export { BASE_NAV_LINKS, getNavLinks };

@@ -8,11 +8,13 @@
  */
 
 import { generateId } from './utils.js';
+import { apiRequest } from './api.js';
 
 const KEYS = {
   BUILDS: 'buildforge_builds',
   FAVORITES: 'buildforge_favorites',
   CURRENT_DRAFT: 'buildforge_current_draft',
+  AUTH_TOKEN: 'buildforge_auth_token',
 };
 
 /** Safely parse JSON from localStorage, falling back to a default on any error. */
@@ -162,12 +164,12 @@ export function getFavorites() {
 }
 
 export function isFavorite(category, componentId) {
-  return getFavorites().some((f) => f.category === category && f.id === componentId);
+  return getFavorites().some((f) => f.category === category && (f.id === componentId || f.componentId === componentId));
 }
 
 export function toggleFavorite(category, componentId) {
   const favorites = getFavorites();
-  const idx = favorites.findIndex((f) => f.category === category && f.id === componentId);
+  const idx = favorites.findIndex((f) => f.category === category && (f.id === componentId || f.componentId === componentId));
   if (idx !== -1) {
     favorites.splice(idx, 1);
   } else {
@@ -175,6 +177,41 @@ export function toggleFavorite(category, componentId) {
   }
   writeJSON(KEYS.FAVORITES, favorites);
   return idx === -1; // returns true if it is now favorited
+}
+
+export async function fetchUserFavoriteComponents() {
+  try {
+    const res = await apiRequest('/users/me/favorites/components');
+    if (res.ok) {
+      const favs = await res.json();
+      writeJSON(KEYS.FAVORITES, favs);
+      return favs;
+    }
+  } catch (err) {
+    console.warn('Failed to fetch user favorite components from backend', err);
+  }
+  return getFavorites();
+}
+
+export async function toggleUserFavoriteComponent(category, componentId) {
+  const currentlyFav = isFavorite(category, componentId);
+  const nowFav = toggleFavorite(category, componentId);
+
+  try {
+    if (currentlyFav) {
+      await apiRequest(`/users/me/favorites/components/${category}/${componentId}`, {
+        method: 'DELETE'
+      });
+    } else {
+      await apiRequest('/users/me/favorites/components', {
+        method: 'POST',
+        body: JSON.stringify({ category, id: componentId })
+      });
+    }
+  } catch (err) {
+    console.warn('Failed to sync component favorite with backend', err);
+  }
+  return nowFav;
 }
 
 /* ============================================================
@@ -193,3 +230,24 @@ export function saveDraft(draft) {
 export function clearDraft() {
   localStorage.removeItem(KEYS.CURRENT_DRAFT);
 }
+
+/* ============================================================
+   AUTHENTICATION TOKEN
+   ============================================================ */
+
+export function getAuthToken() {
+  return localStorage.getItem(KEYS.AUTH_TOKEN) || null;
+}
+
+export function saveAuthToken(token) {
+  if (token) {
+    localStorage.setItem(KEYS.AUTH_TOKEN, token);
+  } else {
+    localStorage.removeItem(KEYS.AUTH_TOKEN);
+  }
+}
+
+export function clearAuthToken() {
+  localStorage.removeItem(KEYS.AUTH_TOKEN);
+}
+

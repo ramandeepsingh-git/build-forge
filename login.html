@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account — Build Forge</title>
+  <meta name="description" content="Sign in or create an account with Build Forge to manage your custom PC configurations and sync saved builds." />
+
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+  <div class="page">
+    <header id="site-header" class="site-header"></header>
+
+    <main class="page__main auth-wrapper">
+      <!-- Ambient animated background elements -->
+      <div class="auth-decor" aria-hidden="true">
+        <div class="auth-decor__orb auth-decor__orb--1"></div>
+        <div class="auth-decor__orb auth-decor__orb--2"></div>
+        <div class="auth-decor__chip auth-decor__chip--1">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="4"/></svg>
+          RTX 5090
+        </div>
+        <div class="auth-decor__chip auth-decor__chip--2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+          Ryzen 7 7800X3D
+        </div>
+        <div class="auth-decor__chip auth-decor__chip--3">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+          32GB DDR5-6000
+        </div>
+      </div>
+
+      <section class="container auth-container" style="position: relative; z-index: 1;">
+        <div class="auth-card">
+          <!-- Auth mode toggle tabs -->
+          <div class="auth-tabs" role="tablist">
+            <button type="button" class="auth-tab is-active" id="tab-login" role="tab" aria-selected="true">Sign In</button>
+            <button type="button" class="auth-tab" id="tab-signup" role="tab" aria-selected="false">Create Account</button>
+          </div>
+
+          <div id="auth-header-login" class="auth-card__header">
+            <span class="eyebrow">Build Forge / Account</span>
+            <h1 class="auth-card__title">Sign In</h1>
+            <p class="auth-card__subtitle">Enter your username or email address to access your builds and favorites.</p>
+          </div>
+
+          <div id="auth-header-signup" class="auth-card__header" style="display: none;">
+            <span class="eyebrow">Build Forge / Account</span>
+            <h1 class="auth-card__title">Create Account</h1>
+            <p class="auth-card__subtitle">Join Build Forge to design, save, and persist your custom PC configurations.</p>
+          </div>
+
+          <div id="auth-error" class="auth-error" style="display: none; margin-bottom: var(--sp-4);" role="alert"></div>
+          <div id="auth-success" class="auth-success" style="display: none; margin-bottom: var(--sp-4);" role="status"></div>
+
+          <!-- Login Form -->
+          <form id="login-form" class="auth-form" novalidate>
+            <div class="auth-form__group">
+              <label for="login-identifier" class="auth-form__label">Username or Email</label>
+              <input
+                type="text"
+                id="login-identifier"
+                name="identifier"
+                class="input"
+                required
+                placeholder="Enter username or email address"
+                autocomplete="username"
+              />
+            </div>
+
+            <div class="auth-form__group">
+              <label for="login-password" class="auth-form__label">Password</label>
+              <input
+                type="password"
+                id="login-password"
+                name="password"
+                class="input"
+                required
+                placeholder="Enter password"
+                autocomplete="current-password"
+              />
+            </div>
+
+            <button type="submit" id="btn-login" class="btn btn--primary btn--block" style="margin-top: var(--sp-2);">
+              Sign In
+            </button>
+
+            <div class="auth-footer-prompt">
+              Don't have an account? <a id="link-to-signup">Create one now</a>
+            </div>
+          </form>
+
+          <!-- Signup Form -->
+          <form id="signup-form" class="auth-form" style="display: none;" novalidate>
+            <div class="auth-form__group">
+              <label for="signup-username" class="auth-form__label">Username</label>
+              <input
+                type="text"
+                id="signup-username"
+                name="username"
+                class="input"
+                required
+                placeholder="Choose a username"
+                autocomplete="username"
+              />
+            </div>
+
+            <div class="auth-form__group">
+              <label for="signup-email" class="auth-form__label">Email Address</label>
+              <input
+                type="email"
+                id="signup-email"
+                name="email"
+                class="input"
+                required
+                placeholder="name@example.com"
+                autocomplete="email"
+              />
+            </div>
+
+            <div class="auth-form__group">
+              <label for="signup-password" class="auth-form__label">Password</label>
+              <input
+                type="password"
+                id="signup-password"
+                name="password"
+                class="input"
+                required
+                placeholder="Create a secure password"
+                autocomplete="new-password"
+              />
+            </div>
+
+            <div class="auth-form__group">
+              <label for="signup-confirm-password" class="auth-form__label">Confirm Password</label>
+              <input
+                type="password"
+                id="signup-confirm-password"
+                name="confirmPassword"
+                class="input"
+                required
+                placeholder="Re-enter your password"
+                autocomplete="new-password"
+              />
+            </div>
+
+            <button type="submit" id="btn-signup" class="btn btn--primary btn--block" style="margin-top: var(--sp-2);">
+              Create Account
+            </button>
+
+            <div class="auth-footer-prompt">
+              Already have an account? <a id="link-to-login">Sign in</a>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer id="site-footer" class="site-footer"></footer>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/login.js"></script>
+</body>
+</html>

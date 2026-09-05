@@ -7,6 +7,7 @@
  */
 
 import { $, $$, loadJSON, formatCurrency, formatWatts, capitalize, debounce, getQueryParam } from './utils.js';
+import { apiRequest } from './api.js';
 import { getDraft, saveDraft, clearDraft, saveBuild, getBuildById } from './storage.js';
 import { runCompatibilityReport } from './compatibility.js';
 import { buildPowerReport } from './calculator.js';
@@ -90,12 +91,22 @@ async function loadDraftState() {
   let loaded = null;
 
   if (editId) {
-    loaded = getBuildById(editId);
+    try {
+      const res = await apiRequest(`/builds/${editId}`);
+      if (res.ok) {
+        loaded = await res.json();
+      }
+    } catch (err) {
+      console.warn('Failed to fetch build from backend', err);
+    }
+    if (!loaded) {
+      loaded = getBuildById(editId);
+    }
     if (loaded) {
       state.draft = {
         id: loaded.id,
         name: loaded.name || 'Untitled Build',
-        parts: loaded.parts || {},
+        parts: loaded.parts || loaded.components || {},
         notes: loaded.notes || '',
         createdAt: loaded.createdAt || null,
         updatedAt: loaded.updatedAt || null
@@ -409,7 +420,38 @@ function removePart(category) {
    PAGE ACTIONS
    ============================================================ */
 
-function saveCurrentBuild() {
+async function saveCurrentBuild() {
+  const payload = {
+    name: state.draft.name || 'Untitled Build',
+    notes: state.draft.notes || '',
+    parts: state.draft.parts || {}
+  };
+
+  try {
+    const isExisting = state.draft.id && !String(state.draft.id).startsWith('build_');
+    const endpoint = isExisting ? `/builds/${state.draft.id}` : '/builds';
+    const method = isExisting ? 'PUT' : 'POST';
+
+    const res = await apiRequest(endpoint, {
+      method: method,
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      const saved = await res.json();
+      state.draft.id = saved.id;
+      state.draft.createdAt = saved.createdAt;
+      state.draft.updatedAt = saved.updatedAt;
+      saveDraft(state.draft);
+      saveBuild(saved);
+      updateBuildMetaTimestamps();
+      showToast(`Build "${state.draft.name}" saved to database.`);
+      return;
+    }
+  } catch (err) {
+    console.warn('Backend save failed, saving locally', err);
+  }
+
   const saved = saveBuild(state.draft);
   if (saved) {
     state.draft.id = saved.id;

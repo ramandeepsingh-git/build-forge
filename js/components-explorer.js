@@ -8,7 +8,7 @@
 
 import { $, $$, loadJSON, formatCurrency, formatWatts, capitalize, debounce, getQueryParam } from './utils.js';
 import { searchComponents, bindSearchInput } from './search.js';
-import { isFavorite, toggleFavorite, getDraft, saveDraft } from './storage.js';
+import { isFavorite, toggleFavorite, fetchUserFavoriteComponents, toggleUserFavoriteComponent, getDraft, saveDraft } from './storage.js';
 
 const CATEGORY_CONFIG = [
   { key: 'cpu', label: 'CPUs', file: 'data/cpus.json' },
@@ -204,10 +204,10 @@ function renderResultCount() {
 
 function bindCardActions(grid) {
   $$('[data-action="favorite"]', grid).forEach((btn) => {
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', async (e) => {
       e.stopPropagation();
       const { id, category } = btn.dataset;
-      const nowFavorited = toggleFavorite(category, id);
+      const nowFavorited = await toggleUserFavoriteComponent(category, id);
       btn.classList.toggle('icon-btn--active', nowFavorited);
       btn.innerHTML = heartIconSVG(nowFavorited);
       btn.setAttribute('aria-label', nowFavorited ? 'Remove from favorites' : 'Add to favorites');
@@ -382,6 +382,7 @@ export async function initComponentExplorer() {
 
   grid.innerHTML = renderSkeletonCards(6);
 
+  await fetchUserFavoriteComponents();
   state.allItems = await loadAllComponents();
 
   // Read category query param to preselect category (e.g. from Build Planner redirects)

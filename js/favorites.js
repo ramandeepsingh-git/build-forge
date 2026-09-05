@@ -1,10 +1,11 @@
 /**
  * favorites.js
  * Page controller for saved.html. Manages and displays saved PC builds
- * and favorited components from local storage.
+ * from backend API and favorited components with backend persistence.
  */
 
 import { $, $$, loadJSON, formatCurrency, formatWatts, capitalize } from './utils.js';
+import { apiRequest } from './api.js';
 import {
   getAllBuilds,
   deleteBuild,
@@ -13,6 +14,8 @@ import {
   getFavorites,
   toggleFavorite,
   isFavorite,
+  fetchUserFavoriteComponents,
+  toggleUserFavoriteComponent,
   getDraft,
   saveDraft
 } from './storage.js';
@@ -32,7 +35,8 @@ const state = {
   ],
   allComponents: [],
   componentsMap: {},           // Dictionary lookup mapping item ID -> item object
-  activeTab: 'builds'          // 'builds' | 'favorites'
+  activeTab: 'builds',         // 'builds' | 'favorites'
+  savedBuilds: []
 };
 
 /* ============================================================
@@ -52,9 +56,24 @@ async function loadComponents() {
       return [];
     }
   });
-  
+
   const results = await Promise.all(loadedPromises);
   state.allComponents = results.flat();
+}
+
+async function loadSavedBuildsFromBackend() {
+  try {
+    const res = await apiRequest('/builds?size=100');
+    if (res.ok) {
+      const data = await res.json();
+      state.savedBuilds = Array.isArray(data) ? data : (data.builds || []);
+      return state.savedBuilds;
+    }
+  } catch (err) {
+    console.warn('API builds load failed, using localStorage fallback', err);
+  }
+  state.savedBuilds = getAllBuilds();
+  return state.savedBuilds;
 }
 
 /* ============================================================
@@ -62,103 +81,34 @@ async function loadComponents() {
    ============================================================ */
 
 function updateTabCounts() {
-  const buildsCount = getAllBuilds().length;
+  const buildsCount = state.savedBuilds.length;
   const favoritesCount = getFavorites().length;
-  
+
   const buildsCountEl = $('#builds-count');
   if (buildsCountEl) buildsCountEl.textContent = buildsCount;
-  
+
   const favoritesCountEl = $('#favorites-count');
   if (favoritesCountEl) favoritesCountEl.textContent = favoritesCount;
 }
 
-function renderGrid() {
+async function renderGrid() {
   const grid = $('#saved-items-grid');
   if (!grid) return;
-  
+
+  await loadSavedBuildsFromBackend();
+  await fetchUserFavoriteComponents();
   updateTabCounts();
-  
+
   if (state.activeTab === 'builds') {
-    const builds = getAllBuilds();
+    const builds = state.savedBuilds;
     if (builds.length === 0) {
       grid.innerHTML = renderBuildsEmptyState();
       grid.style.gridTemplateColumns = '1fr';
       return;
     }
-    
+
     grid.style.gridTemplateColumns = '';
-    grid.innerHTML = builds.map(build => {
-      // Resolve part IDs to full component items
-      const resolved = {};
-      let partsCount = 0;
-      let totalPrice = 0;
-      
-      for (const [key, id] of Object.entries(build.parts)) {
-        if (id) {
-          const part = state.componentsMap[id];
-          if (part) {
-            resolved[key] = part;
-            partsCount++;
-            totalPrice += part.price;
-          }
-        }
-      }
-      
-      const power = buildPowerReport(resolved);
-      const compat = runCompatibilityReport(resolved, power.totalWatts);
-      
-      let statusBadgeClass = 'badge--good';
-      if (compat.overallStatus === 'warning') {
-        statusBadgeClass = 'badge--warn';
-      } else if (compat.overallStatus === 'error') {
-        statusBadgeClass = 'badge--error';
-      }
-      
-      return `
-        <article class="card saved-build-card" data-id="${build.id}">
-          <div class="saved-build-card__header">
-            <h3 class="saved-build-card__title" title="${build.name}">${build.name}</h3>
-            <span class="badge ${statusBadgeClass}">${capitalize(compat.overallStatus)}</span>
-          </div>
-          
-          <div class="saved-build-card__dates">
-            <span>Created: ${formatDate(build.createdAt)}</span>
-            <span>Updated: ${formatDate(build.updatedAt)}</span>
-          </div>
-          
-          <div class="saved-build-card__stats">
-            <div class="spec-row">
-              <span class="spec-row__label">Total Price</span>
-              <span class="spec-value spec-value--accent">${formatCurrency(totalPrice)}</span>
-            </div>
-            <div class="spec-row">
-              <span class="spec-row__label">Components</span>
-              <span class="spec-value">${partsCount} / 7</span>
-            </div>
-            <div class="spec-row">
-              <span class="spec-row__label">Est. Wattage</span>
-              <span class="spec-value">${formatWatts(power.totalWatts)}</span>
-            </div>
-          </div>
-          
-          <div class="saved-build-card__actions">
-            <button class="btn btn--primary btn--sm" data-action="edit-build" data-id="${build.id}">
-              Edit Build
-            </button>
-            <button class="icon-btn" data-action="duplicate-build" data-id="${build.id}" data-tooltip="Duplicate build" aria-label="Duplicate">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            </button>
-            <button class="icon-btn" data-action="export-build" data-id="${build.id}" data-tooltip="Export JSON" aria-label="Export">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            </button>
-            <button class="icon-btn text-error" data-action="delete-build" data-id="${build.id}" data-tooltip="Delete build" aria-label="Delete" style="color: var(--status-error);">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/></svg>
-            </button>
-          </div>
-        </article>
-      `;
-    }).join('');
-    
+    grid.innerHTML = builds.map(build => renderBuildCardHTML(build)).join('');
     bindBuildActions();
   } else {
     const favorites = getFavorites();
@@ -167,23 +117,97 @@ function renderGrid() {
       grid.style.gridTemplateColumns = '1fr';
       return;
     }
-    
+
     grid.style.gridTemplateColumns = '';
     const cardsHTML = favorites.map(fav => {
-      const item = state.componentsMap[fav.id];
+      const favId = fav.id || fav.componentId;
+      const item = state.componentsMap[favId];
       if (!item) return '';
       return renderFavoriteComponentCard(item);
     }).filter(Boolean).join('');
-    
+
     if (!cardsHTML) {
       grid.innerHTML = renderFavoritesEmptyState();
       grid.style.gridTemplateColumns = '1fr';
       return;
     }
-    
+
     grid.innerHTML = cardsHTML;
     bindFavoriteActions();
   }
+}
+
+function renderBuildCardHTML(build) {
+  const resolved = {};
+  let partsCount = 0;
+  let totalPrice = 0;
+
+  const parts = build.parts || build.components || {};
+
+  for (const [key, id] of Object.entries(parts)) {
+    if (id && typeof id === 'string') {
+      const part = state.componentsMap[id];
+      if (part) {
+        resolved[key] = part;
+        partsCount++;
+        totalPrice += part.price;
+      }
+    }
+  }
+
+  const power = buildPowerReport(resolved);
+  const compat = runCompatibilityReport(resolved, power.totalWatts);
+
+  let statusBadgeClass = 'badge--good';
+  if (compat.overallStatus === 'warning') {
+    statusBadgeClass = 'badge--warn';
+  } else if (compat.overallStatus === 'error') {
+    statusBadgeClass = 'badge--error';
+  }
+
+  return `
+    <article class="card saved-build-card" data-id="${build.id}">
+      <div class="saved-build-card__header">
+        <h3 class="saved-build-card__title" title="${build.name}">${build.name}</h3>
+        <span class="badge ${statusBadgeClass}">${capitalize(compat.overallStatus)}</span>
+      </div>
+
+      <div class="saved-build-card__dates">
+        <span>Created: ${formatDate(build.createdAt)}</span>
+        <span>Updated: ${formatDate(build.updatedAt)}</span>
+      </div>
+
+      <div class="saved-build-card__stats">
+        <div class="spec-row">
+          <span class="spec-row__label">Total Price</span>
+          <span class="spec-value spec-value--accent">${formatCurrency(totalPrice)}</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-row__label">Components</span>
+          <span class="spec-value">${partsCount} / 7</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-row__label">Est. Wattage</span>
+          <span class="spec-value">${formatWatts(power.totalWatts)}</span>
+        </div>
+      </div>
+
+      <div class="saved-build-card__actions">
+        <button class="btn btn--primary btn--sm" data-action="edit-build" data-id="${build.id}">
+          Edit Build
+        </button>
+        <button class="icon-btn" data-action="duplicate-build" data-id="${build.id}" data-tooltip="Duplicate build" aria-label="Duplicate">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </button>
+        <button class="icon-btn" data-action="export-build" data-id="${build.id}" data-tooltip="Export JSON" aria-label="Export">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        </button>
+        <button class="icon-btn text-error" data-action="delete-build" data-id="${build.id}" data-tooltip="Delete build" aria-label="Delete" style="color: var(--status-error);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/></svg>
+        </button>
+      </div>
+    </article>
+  `;
 }
 
 /* ============================================================
@@ -210,7 +234,7 @@ function renderFavoritesEmptyState() {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7.5-4.6-10-9.1C.5 8.4 2.6 5 6 5c2 0 3.5 1 6 3.5C14.5 6 16 5 18 5c3.4 0 5.5 3.4 4 6.9C19.5 16.4 12 21 12 21Z"/></svg>
       </div>
       <h3 class="empty-state-card__title">No Favorites Yet</h3>
-      <p class="empty-state-card__text">Browse the Component Explorer and favorite parts to save them here for quick access.</p>
+      <p class="empty-state-card__text">Browse the Component Explorer and favorite components to save them here for quick access.</p>
       <a href="components.html" class="btn btn--primary">Explore Components</a>
     </div>
   `;
@@ -219,7 +243,7 @@ function renderFavoritesEmptyState() {
 function renderFavoriteComponentCard(item) {
   const favorited = isFavorite(item.category, item.id);
   const specs = item.specs ? item.specs.slice(0, 2) : [];
-  
+
   return `
     <article class="component-card card card--interactive" data-id="${item.id}" data-category="${item.category}">
       <div class="component-card__top">
@@ -270,30 +294,51 @@ function bindBuildActions() {
       window.location.href = `builder.html?editBuildId=${btn.dataset.id}`;
     });
   });
-  
+
   $$('[data-action="duplicate-build"]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const dup = duplicateBuild(btn.dataset.id);
+    btn.addEventListener('click', async () => {
+      const buildId = btn.dataset.id;
+      const original = state.savedBuilds.find(b => String(b.id) === String(buildId));
+      if (original) {
+        try {
+          const payload = {
+            name: `${original.name} (Copy)`,
+            notes: original.notes || '',
+            parts: original.parts || original.components || {}
+          };
+          const createRes = await apiRequest('/builds', {
+            method: 'POST',
+            body: JSON.stringify(payload)
+          });
+          if (createRes.ok) {
+            showToast(`Duplicated build as "${payload.name}"`);
+            await renderGrid();
+            return;
+          }
+        } catch (err) {
+          console.warn('Backend duplicate failed', err);
+        }
+      }
+      const dup = duplicateBuild(buildId);
       if (dup) {
         showToast(`Duplicated build as "${dup.name}"`);
-        renderGrid();
+        await renderGrid();
       } else {
         showToast('Failed to duplicate build.');
       }
     });
   });
-  
+
   $$('[data-action="export-build"]').forEach(btn => {
     btn.addEventListener('click', () => {
       const buildId = btn.dataset.id;
-      const builds = getAllBuilds();
-      const buildObj = builds.find(b => b.id === buildId);
+      const buildObj = state.savedBuilds.find(b => String(b.id) === String(buildId)) || getAllBuilds().find(b => String(b.id) === String(buildId));
       if (!buildObj) return;
-      
+
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(buildObj, null, 2));
       const downloadAnchor = document.createElement('a');
       downloadAnchor.setAttribute("href", dataStr);
-      const filename = buildObj.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'build-forge-build';
+      const filename = (buildObj.name || 'build-forge-build').toLowerCase().replace(/[^a-z0-9]+/g, '-');
       downloadAnchor.setAttribute("download", `${filename}.json`);
       document.body.appendChild(downloadAnchor);
       downloadAnchor.click();
@@ -301,13 +346,27 @@ function bindBuildActions() {
       showToast('Build exported successfully.');
     });
   });
-  
+
   $$('[data-action="delete-build"]').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       if (confirm('Are you sure you want to permanently delete this build?')) {
-        deleteBuild(btn.dataset.id);
-        showToast('Build deleted.');
-        renderGrid();
+        const id = btn.dataset.id;
+        try {
+          const res = await apiRequest(`/builds/${id}`, { method: 'DELETE' });
+          if (res.ok || res.status === 204) {
+            deleteBuild(id);
+            showToast('Build deleted successfully.');
+            await renderGrid();
+            return;
+          } else {
+            showToast('Failed to delete build from server.');
+            return;
+          }
+        } catch (err) {
+          console.error('Backend delete failed', err);
+          showToast('Network error while deleting build.');
+          return;
+        }
       }
     });
   });
@@ -315,14 +374,14 @@ function bindBuildActions() {
 
 function bindFavoriteActions() {
   $$('[data-action="toggle-fav"]').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       const { category, id } = btn.dataset;
-      toggleFavorite(category, id);
+      await toggleUserFavoriteComponent(category, id);
       showToast('Removed from favorites.');
-      renderGrid();
+      await renderGrid();
     });
   });
-  
+
   $$('[data-action="add-to-build"]').forEach(btn => {
     btn.addEventListener('click', () => {
       const { category, id } = btn.dataset;
@@ -330,7 +389,7 @@ function bindFavoriteActions() {
       if (!draft.parts) draft.parts = {};
       draft.parts[category] = id;
       saveDraft(draft);
-      
+
       const item = state.componentsMap[id];
       const name = item ? `${item.brand} ${item.model}` : category.toUpperCase();
       showToast(`Added ${name} to build.`);
@@ -341,33 +400,33 @@ function bindFavoriteActions() {
 function bindImport() {
   const importBtn = $('#btn-import-build');
   const fileInput = $('#file-import');
-  
+
   if (!importBtn || !fileInput) return;
-  
+
   importBtn.addEventListener('click', () => {
     fileInput.click();
   });
-  
+
   fileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    
+
     const reader = new FileReader();
-    reader.onload = (evt) => {
+    reader.onload = async (evt) => {
       try {
         const imported = importBuildFromJSON(evt.target.result);
         if (imported) {
           showToast(`Imported build "${imported.name}" successfully!`);
           fileInput.value = '';
-          
+
           if (state.activeTab === 'builds') {
-            renderGrid();
+            await renderGrid();
           } else {
             state.activeTab = 'builds';
             $$('.saved-tab').forEach(t => {
               t.classList.toggle('is-active', t.dataset.tab === 'builds');
             });
-            renderGrid();
+            await renderGrid();
           }
         }
       } catch (err) {
@@ -381,7 +440,7 @@ function bindImport() {
 
 function bindTabs() {
   $$('.saved-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
+    tab.addEventListener('click', async () => {
       $$('.saved-tab').forEach(t => {
         t.classList.remove('is-active');
         t.setAttribute('aria-selected', 'false');
@@ -389,7 +448,7 @@ function bindTabs() {
       tab.classList.add('is-active');
       tab.setAttribute('aria-selected', 'true');
       state.activeTab = tab.dataset.tab;
-      renderGrid();
+      await renderGrid();
     });
   });
 }
@@ -482,15 +541,15 @@ function showToast(message) {
 async function initSaved() {
   const grid = $('#saved-items-grid');
   if (!grid) return; // not on this page
-  
+
   // Render skeletons first
   grid.innerHTML = Array.from({ length: 3 })
     .map(() => `<div class="card skeleton" style="height: 240px; border-radius: var(--radius-lg);"></div>`)
     .join('');
-  
+
   await loadComponents();
-  
-  renderGrid();
+
+  await renderGrid();
   bindTabs();
   bindImport();
 }
