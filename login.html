@@ -6,6 +6,19 @@
   <title>Account — Build Forge</title>
   <meta name="description" content="Sign in or create an account with Build Forge to manage your custom PC configurations and sync saved builds." />
 
+  <!-- Synchronous theme init to prevent light-theme flash -->
+  <script>
+    (function() {
+      try {
+        const stored = localStorage.getItem('buildforge_theme');
+        const theme = (stored === 'dark' || stored === 'light')
+          ? stored
+          : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (_) {}
+    })();
+  </script>
+
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/layout.css" />
   <link rel="stylesheet" href="css/components.css" />

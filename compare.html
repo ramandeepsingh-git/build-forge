@@ -6,6 +6,19 @@
   <title>Compare Center — Build Forge</title>
   <meta name="description" content="Compare PC components or saved builds side-by-side with Build Forge's custom comparison tables." />
 
+  <!-- Synchronous theme init to prevent light-theme flash -->
+  <script>
+    (function() {
+      try {
+        const stored = localStorage.getItem('buildforge_theme');
+        const theme = (stored === 'dark' || stored === 'light')
+          ? stored
+          : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (_) {}
+    })();
+  </script>
+
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/layout.css" />
   <link rel="stylesheet" href="css/components.css" />

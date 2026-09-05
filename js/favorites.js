@@ -17,7 +17,8 @@ import {
   fetchUserFavoriteComponents,
   toggleUserFavoriteComponent,
   getDraft,
-  saveDraft
+  saveDraft,
+  getAuthToken
 } from './storage.js';
 import { runCompatibilityReport } from './compatibility.js';
 import { buildPowerReport } from './calculator.js';
@@ -534,21 +535,85 @@ function showToast(message) {
   }, 2400);
 }
 
+function renderGuestState(root) {
+  root.innerHTML = `
+    <div class="profile-container" style="margin: var(--sp-8) auto;">
+      <div class="profile-guest-card">
+        <div class="profile-guest-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <h1 class="profile-guest-title">Sign In Required</h1>
+        <p class="profile-guest-desc">
+          Sign in or create an account to view and manage your saved PC configurations and component favorites.
+        </p>
+        <div class="profile-guest-actions">
+          <a href="login.html?redirect=saved.html" class="btn btn--primary">Sign In</a>
+          <a href="login.html?mode=signup&redirect=saved.html" class="btn btn--secondary">Create Account</a>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderAuthenticatedSavedUI(root) {
+  root.innerHTML = `
+    <!-- ============ HEADER ============ -->
+    <section class="saved-header">
+      <div class="container">
+        <div class="saved-header__inner">
+          <div>
+            <span class="eyebrow">Build Forge / Hub</span>
+            <h1 class="section-title">Saved Builds &amp; Favorites</h1>
+            <p class="section-subtitle">Manage your custom configurations and saved components in one place. Export, duplicate, or restore them anytime.</p>
+          </div>
+          <div>
+            <button class="btn btn--secondary btn--sm" id="btn-import-build">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16" style="margin-right: var(--sp-1);"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+              Import Build
+            </button>
+            <input type="file" id="file-import" accept=".json" style="display: none;" />
+          </div>
+        </div>
+
+        <!-- ============ TABS ============ -->
+        <div class="saved-tabs" role="tablist" aria-label="Saved items">
+          <button class="saved-tab is-active" data-tab="builds" role="tab" aria-selected="true">
+            Saved Builds (<span id="builds-count">0</span>)
+          </button>
+          <button class="saved-tab" data-tab="favorites" role="tab" aria-selected="false">
+            Favorites (<span id="favorites-count">0</span>)
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTENT GRID ============ -->
+    <section class="container saved-container">
+      <div class="saved-grid" id="saved-items-grid">
+        <div class="card skeleton" style="height: 240px; border-radius: var(--radius-lg);"></div>
+        <div class="card skeleton" style="height: 240px; border-radius: var(--radius-lg);"></div>
+        <div class="card skeleton" style="height: 240px; border-radius: var(--radius-lg);"></div>
+      </div>
+    </section>
+  `;
+}
+
 /* ============================================================
    INITIALIZATION
    ============================================================ */
 
 async function initSaved() {
-  const grid = $('#saved-items-grid');
-  if (!grid) return; // not on this page
+  const root = $('#saved-root') || document.querySelector('.page__main');
+  if (!root) return;
 
-  // Render skeletons first
-  grid.innerHTML = Array.from({ length: 3 })
-    .map(() => `<div class="card skeleton" style="height: 240px; border-radius: var(--radius-lg);"></div>`)
-    .join('');
+  const token = getAuthToken();
+  if (!token) {
+    renderGuestState(root);
+    return;
+  }
 
+  renderAuthenticatedSavedUI(root);
   await loadComponents();
-
   await renderGrid();
   bindTabs();
   bindImport();

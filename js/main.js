@@ -19,14 +19,9 @@ const BASE_NAV_LINKS = [
   { label: 'Saved Builds', href: 'saved.html' },
   { label: 'Compare', href: 'compare.html' },
   { label: 'About', href: 'about.html' },
-  { label: 'Profile', href: 'profile.html' },
 ];
 
 function getNavLinks() {
-  const token = getAuthToken();
-  if (token) {
-    return [...BASE_NAV_LINKS];
-  }
   return [...BASE_NAV_LINKS];
 }
 
@@ -105,8 +100,13 @@ function renderMobileNav(active, navLinks) {
       ${navLinks.map((link) => `
         <li><a href="${link.href}" class="${link.href === active ? 'is-active' : ''}">${link.label}</a></li>
       `).join('')}
-      ${!getAuthToken() ? `<li><a href="login.html" class="${active === 'login.html' ? 'is-active' : ''}">Sign In</a></li>` : ''}
+      ${getAuthToken() 
+        ? `<li><a href="profile.html" class="${active === 'profile.html' ? 'is-active' : ''}">Profile</a></li>` 
+        : `<li><a href="login.html" class="${active === 'login.html' ? 'is-active' : ''}">Sign In</a></li>`}
     </ul>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark or light theme">
+          <span class="theme-toggle__thumb">${sunIconSVG()}</span>
+        </button>
   `;
   
   document.body.append(scrim, panel);
@@ -204,14 +204,6 @@ function initApp() {
   initTheme();
   renderHeader();
   renderFooter();
-
-  // Authentication entry guard
-  const active = currentPage();
-  const token = getAuthToken();
-  if (active === 'saved.html' && !token) {
-    window.location.href = 'login.html?redirect=saved.html';
-    return;
-  }
 
   const mainEl = $('.page__main');
   if (mainEl) mainEl.classList.add('page-transition');

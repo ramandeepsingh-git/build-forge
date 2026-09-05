@@ -33,6 +33,10 @@ export function initTheme() {
   applyTheme(getPreferredTheme());
 }
 
+if (typeof document !== 'undefined') {
+  initTheme();
+}
+
 /** Wire up a toggle button (or any element) to flip the theme on click. */
 export function bindThemeToggle(toggleEl) {
   if (!toggleEl) return;
@@ -45,3 +49,4 @@ export function bindThemeToggle(toggleEl) {
 export function getCurrentTheme() {
   return document.documentElement.getAttribute('data-theme') || DARK;
 }
+

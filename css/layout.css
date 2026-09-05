@@ -61,7 +61,8 @@
   gap: var(--sp-3);
 }
 
-.site-header__menu-toggle {
+.site-header__menu-toggle,
+.site-header__menu-toggle.icon-btn {
   display: none;
 }
 
@@ -70,8 +71,9 @@
     display: none;
   }
 
-  .site-header__menu-toggle {
-    display: flex;
+  .site-header__menu-toggle,
+  .site-header__menu-toggle.icon-btn {
+    display: inline-flex;
   }
 }
 

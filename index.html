@@ -6,6 +6,19 @@
   <title>Build Forge — Build Your Dream PC</title>
   <meta name="description" content="Build Forge is a precision PC build planner. Pick parts, check compatibility instantly, and plan a build you can trust." />
 
+  <!-- Synchronous theme init to prevent light-theme flash -->
+  <script>
+    (function() {
+      try {
+        const stored = localStorage.getItem('buildforge_theme');
+        const theme = (stored === 'dark' || stored === 'light')
+          ? stored
+          : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (_) {}
+    })();
+  </script>
+
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/layout.css" />
   <link rel="stylesheet" href="css/components.css" />
